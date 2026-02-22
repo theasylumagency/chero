@@ -38,9 +38,14 @@ export default function KobuletiLocation() {
                     <div className="absolute inset-0 bg-gradient-to-tr from-chero-accent/5 to-transparent rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     <div className="relative h-[400px] w-full rounded-3xl border border-white/10 bg-black/40 overflow-hidden group-hover:shadow-[0_0_50px_-15px_rgba(204,168,118,0.15)] transition-shadow duration-500">
-                        <div className="absolute inset-0 flex items-center justify-center p-8 text-center text-sm font-light text-white/50 tracking-wider">
-                            Minimal “map card” now (fast). Next step: click-to-load real map embed.
-                        </div>
+                        <iframe
+                            title="Chero Restaurant Location"
+                            src={`https://maps.google.com/maps?q=${encodeURIComponent("Chero, Kobuleti David Aghmashenebeli Ave 454")}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                            className="absolute inset-0 w-full h-full border-0 grayscale opacity-80 mix-blend-luminosity hover:grayscale-0 hover:opacity-100 hover:mix-blend-normal transition-all duration-700"
+                            loading="lazy"
+                            allowFullScreen
+                            referrerPolicy="no-referrer-when-downgrade"
+                        />
                     </div>
                 </div>
 

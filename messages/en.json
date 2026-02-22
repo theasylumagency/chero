@@ -1,0 +1,70 @@
+{
+    "home": {
+        "hero": {
+            "tagline": "Kobuleti.   ",
+            "tagline2": "Black Sea air. ",
+            "tagline3": "A taste that needs no words.",
+            "signal": "Signal received",
+            "ctaMenu": "Menu",
+            "ctaFind": "Find us"
+        },
+        "taste": {
+            "title": "Chef’s Top Picks",
+            "body": "Chero is where tradition doesn’t pose — it simply works."
+        },
+        "highlights": {
+            "title": "Tonight’s highlights",
+            "hint": "A short story for every dish — at a glance."
+        },
+        "menuSignal": {
+            "title": "Menu signal",
+            "searchPlaceholder": "Search a dish…",
+            "openFull": "Open full menu"
+        },
+        "location": {
+            "title": "Kobuleti — we’re here",
+            "addressLabel": "Address",
+            "hoursLabel": "Working hours",
+            "phonesLabel": "Phone",
+            "whatsAppNote": "Both numbers have WhatsApp",
+            "openMap": "Open map",
+            "call": "Call"
+        },
+        "final": {
+            "line": "The door is open.\nThe rest is simple.",
+            "menu": "Menu",
+            "directions": "Directions",
+            "call": "Call"
+        }
+    },
+    "menu": {
+        "ui": {
+            "title": "Menu",
+            "searchPlaceholder": "Search a dish…",
+            "openFull": "Open full menu"
+        },
+        "dishCard": {
+            "soldOut": "sold out",
+            "chefsPick": "chef’s pick",
+            "veg": "veg",
+            "exploreDish": "Explore Dish",
+            "unavailable": "Unavailable"
+        }
+    },
+    "footer": {
+        "tagline": "Taste of Georgia • Since 1998",
+        "explore": "Explore",
+        "menu": "Menu",
+        "picks": "Chef’s Top Picks",
+        "find": "Find us",
+        "visit": "Visit",
+        "addressLabel": "Address",
+        "address": "Kobuleti, David Aghmashenebeli Ave. 454",
+        "hoursLabel": "Working hours",
+        "hours": "10:00–24:00",
+        "contact": "Contact",
+        "whatsappNote": "Both numbers have WhatsApp",
+        "copyright": "© {year} Chero. All rights reserved.",
+        "signature": "Kobuleti • Black Sea coast"
+    }
+}

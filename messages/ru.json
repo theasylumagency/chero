@@ -1,0 +1,70 @@
+{
+    "home": {
+        "hero": {
+            "tagline": "Кобулети.",
+            "tagline2": "Воздух Чёрного моря и",
+            "tagline3": "Вкус, которому не нужны слова.",
+            "signal": "Сигнал принят",
+            "ctaMenu": "Меню",
+            "ctaFind": "Как нас найти"
+        },
+        "taste": {
+            "title": "Вкус Грузии",
+            "body": "Chero — место, где традиция не позирует. Она просто работает."
+        },
+        "highlights": {
+            "title": "Выбор шефа",
+            "hint": "Короткая история к каждому блюду — одним взглядом."
+        },
+        "menuSignal": {
+            "title": "Сигнал меню",
+            "searchPlaceholder": "Найти блюдо…",
+            "openFull": "Открыть меню"
+        },
+        "location": {
+            "title": "Кобулети — мы здесь",
+            "addressLabel": "Адрес",
+            "hoursLabel": "Часы работы",
+            "phonesLabel": "Телефон",
+            "whatsAppNote": "Оба номера в WhatsApp",
+            "openMap": "Открыть карту",
+            "call": "Позвонить"
+        },
+        "final": {
+            "line": "Дверь открыта.\nОстальное просто.",
+            "menu": "Меню",
+            "directions": "Маршрут",
+            "call": "Позвонить"
+        }
+    },
+    "menu": {
+        "ui": {
+            "title": "Меню",
+            "searchPlaceholder": "Найти блюдо…",
+            "openFull": "Открыть меню"
+        },
+        "dishCard": {
+            "soldOut": "продано",
+            "chefsPick": "выбор шефа",
+            "veg": "вег",
+            "exploreDish": "Смотреть блюдо",
+            "unavailable": "Недоступно"
+        }
+    },
+    "footer": {
+        "tagline": "Вкус Грузии • С 1998 года",
+        "explore": "Навигация",
+        "menu": "Меню",
+        "picks": "Выбор шефа",
+        "find": "Как нас найти",
+        "visit": "Адрес",
+        "addressLabel": "Адрес",
+        "address": "Кобулети, просп. Давида Агмашенебели, 454",
+        "hoursLabel": "Часы работы",
+        "hours": "10:00–24:00",
+        "contact": "Контакты",
+        "whatsappNote": "Оба номера в WhatsApp",
+        "copyright": "© {year} Chero. Все права защищены.",
+        "signature": "Кобулети • Побережье Чёрного моря"
+    }
+}

@@ -18,18 +18,19 @@ export default async function LocaleLayout({
     params
 }: {
     children: React.ReactNode;
-    params: Promise<{ locale: "ka" | "en" | "ru" }>;
+    params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
+    const typedLocale = locale as "ka" | "en" | "ru";
 
-    if (!routing.locales.includes(locale)) {
+    if (!routing.locales.includes(typedLocale as any)) {
         notFound();
     }
 
-    setRequestLocale(locale);
+    setRequestLocale(typedLocale);
 
     return (
-        <NextIntlClientProvider key={locale} locale={locale} messages={MESSAGES[locale]}>
+        <NextIntlClientProvider key={typedLocale} locale={typedLocale} messages={MESSAGES[typedLocale]}>
             {children}
         </NextIntlClientProvider>
     );

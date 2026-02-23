@@ -69,6 +69,7 @@
         },
         "dishCard": {
             "soldOut": "არ არის მარაგში",
+            "bestseller": "ბესტსელერი",
             "chefsPick": "შეფის რჩეული",
             "veg": "ვეგ",
             "exploreDish": "კერძის დეტალები",
@@ -90,5 +91,34 @@
         "whatsappNote": "ორივე ნომერზე WhatsApp",
         "copyright": "© {year} Chero. ყველა უფლება დაცულია.",
         "signature": "ქობულეთი • შავი ზღვის სანაპირო"
+    },
+    "admin": {
+        "dishForm": {
+            "newDish": "ახალი კერძი",
+            "editDish": "კერძის შესწორება:",
+            "id": "ID",
+            "category": "კატეგორია",
+            "status": "სტატუსი",
+            "active": "აქტიური",
+            "hidden": "დამალული",
+            "pricesAndVariants": "ფასები და ვარიანტები",
+            "mainPrice": "მთავარი ფასი (₾)",
+            "mainPriceLabel": "მთავარი ფასის აღწერა (მაგ. 1ლ, საქონლის ხორცი) - არასავალდებულო",
+            "additionalPrices": "დამატებითი ფასები (ვარიანტები)",
+            "variant": "ვარიანტი",
+            "remove": "წაშლა",
+            "price": "ფასი",
+            "addPriceVariant": "+ ფასის დამატება",
+            "vegetarian": "ვეგეტარიანული",
+            "bestseller": "ბესტსელერი",
+            "chefsPick": "შეფის რჩეული",
+            "soldOut": "ამოყიდული",
+            "title": "სახელი",
+            "description": "აღწერა",
+            "story": "ისტორია",
+            "save": "შენახვა",
+            "cancel": "გაუქმება",
+            "saveFailed": "შენახვა ვეღარ მოხერხდა"
+        }
     }
 }

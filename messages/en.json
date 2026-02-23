@@ -69,6 +69,7 @@
         },
         "dishCard": {
             "soldOut": "sold out",
+            "bestseller": "bestseller",
             "chefsPick": "chef’s pick",
             "veg": "veg",
             "exploreDish": "Explore Dish",
@@ -90,5 +91,34 @@
         "whatsappNote": "Both numbers have WhatsApp",
         "copyright": "© {year} Chero. All rights reserved.",
         "signature": "Kobuleti • Black Sea coast"
+    },
+    "admin": {
+        "dishForm": {
+            "newDish": "New Dish",
+            "editDish": "Edit Dish:",
+            "id": "ID",
+            "category": "Category",
+            "status": "Status",
+            "active": "active",
+            "hidden": "hidden",
+            "pricesAndVariants": "Prices & Variants",
+            "mainPrice": "Main Price (GEL)",
+            "mainPriceLabel": "Main Price Label (e.g. 1L, Beef) - Optional",
+            "additionalPrices": "Additional Prices (Variants)",
+            "variant": "Variant",
+            "remove": "Remove",
+            "price": "Price",
+            "addPriceVariant": "+ Add Price Variant",
+            "vegetarian": "Vegetarian",
+            "bestseller": "Bestseller",
+            "chefsPick": "Chef's pick",
+            "soldOut": "Sold out",
+            "title": "Title",
+            "description": "Description",
+            "story": "Story",
+            "save": "Save Changes",
+            "cancel": "Cancel",
+            "saveFailed": "Save failed"
+        }
     }
 }

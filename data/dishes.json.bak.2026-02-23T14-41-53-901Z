@@ -6470,9 +6470,9 @@
       "topRated": false,
       "soldOut": false,
       "story": {
-        "ka": "წარმოება 1872 წელს ნემირივიში (დღევანდელ უკრაინაში), დაიწყო, უდიდესი დისტილაციის ქარხნის გახსნით. თაობების განმავლობაში რეგიონმა შეინარჩუნა თავისი ტრადიციები. ნემიროვი შთაგონებას იღებს რეგიონის უნიკალური თვისებებიდან, როგორიცაა სუფთა ბუნებრივი წყალი, ნაყოფიერი მიწები და ადგილობრივი დისტილაციის მეთოდების ოსტატობა.",
-        "en": "Production began in 1872 in the town of Nemyriv with the opening of the largest distillery in Podillia. For generations, the region has preserved its artisanal traditions, which are upheld to this day. Nemiroff draws inspiration from the unique attributes of the area, such as pure natural water, fertile lands, and the craftsmanship of local distillation methods.",
-        "ru": "Производство началось в 1872 году в Немирове (на территории современной Украины) с открытием крупнейшего винокуренного завода. На протяжении поколений регион сохранял свои традиции. Немиров черпает вдохновение из уникальных особенностей региона, таких как чистая природная вода, плодородные земли и мастерство местных методов дистилляции."
+        "ka": "",
+        "en": "",
+        "ru": ""
       },
       "title": {
         "ka": "ნემიროვი",
@@ -6483,10 +6483,6 @@
         "ka": "",
         "en": "",
         "ru": ""
-      },
-      "photo": {
-        "full": "dish_dish_0195_1600.webp",
-        "small": "dish_dish_0195_800.webp"
       },
       "priceLabel": {
         "ka": "50ml",
@@ -6526,7 +6522,8 @@
             "ru": "1 L"
           }
         }
-      ]
+      ],
+      "chefsPick": false
     },
     {
       "id": "dish_0196",
@@ -6661,25 +6658,7 @@
         "en": "",
         "ru": ""
       },
-      "priceVariants": [
-        {
-          "priceMinor": 15000,
-          "label": {
-            "ka": "500 მლ",
-            "en": "500 ml",
-            "ru": "500 мл"
-          }
-        },
-        {
-          "priceMinor": 30000,
-          "label": {
-            "ka": "1 ლ",
-            "en": "1 L",
-            "ru": "1 л"
-          }
-        }
-      ],
-      "chefsPick": false
+      "priceVariants": []
     },
     {
       "id": "dish_0200",
@@ -6917,5 +6896,5 @@
       "priceVariants": []
     }
   ],
-  "updatedAt": "2026-02-23T14:51:56.108Z"
+  "updatedAt": "2026-02-23T14:35:33.856Z"
 }

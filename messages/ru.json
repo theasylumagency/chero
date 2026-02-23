@@ -68,6 +68,7 @@
         },
         "dishCard": {
             "soldOut": "продано",
+            "bestseller": "бестселлер",
             "chefsPick": "выбор шефа",
             "veg": "вег",
             "exploreDish": "Смотреть блюдо",
@@ -89,5 +90,34 @@
         "whatsappNote": "Оба номера в WhatsApp",
         "copyright": "© {year} Chero. Все права защищены.",
         "signature": "Кобулети • Побережье Чёрного моря"
+    },
+    "admin": {
+        "dishForm": {
+            "newDish": "Новое Блюдо",
+            "editDish": "Редактировать Блюдо:",
+            "id": "ID",
+            "category": "Категория",
+            "status": "Статус",
+            "active": "активный",
+            "hidden": "скрытый",
+            "pricesAndVariants": "Цены и Варианты",
+            "mainPrice": "Основная Цена (₾)",
+            "mainPriceLabel": "Описание Основной Цены (напр. 1л, Говядина) - Необязательно",
+            "additionalPrices": "Дополнительные Цены (Варианты)",
+            "variant": "Вариант",
+            "remove": "Удалить",
+            "price": "Цена",
+            "addPriceVariant": "+ Добавить Вариант Цены",
+            "vegetarian": "Вегетарианское",
+            "bestseller": "Бестселлер",
+            "chefsPick": "Выбор шефа",
+            "soldOut": "Распродано",
+            "title": "Название",
+            "description": "Описание",
+            "story": "История",
+            "save": "Сохранить",
+            "cancel": "Отмена",
+            "saveFailed": "Ошибка сохранения"
+        }
     }
 }

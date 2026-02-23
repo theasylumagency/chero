@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
         title: { ka: body.title?.ka ?? "", en: body.title?.en ?? "", ru: body.title?.ru ?? "" },
         description: { ka: body.description?.ka ?? "", en: body.description?.en ?? "", ru: body.description?.ru ?? "" },
         photo: body.photo ?? (idx === -1 ? undefined : wrap.items[idx].photo),
+        priceLabel: body.priceLabel,
+        priceVariants: body.priceVariants ?? [],
     };
 
     if (idx === -1) wrap.items.push(next);

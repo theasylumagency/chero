@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect } from "react";
 import type { PublicDish } from "./MenuPage";
+import { useTranslations } from "next-intl";
 
 function formatPrice(priceMinor: number, currency: "GEL") {
     const v = priceMinor / 100;
@@ -19,6 +20,8 @@ export default function DishDetailsModal({
     open: boolean;
     onClose: () => void;
 }) {
+    const t = useTranslations("menu.dishCard");
+
     useEffect(() => {
         if (!open) return;
         const onKey = (e: KeyboardEvent) => {
@@ -83,18 +86,23 @@ export default function DishDetailsModal({
                     <div className="absolute left-8 top-8 flex flex-wrap gap-3">
                         {soldOut ? (
                             <span className="rounded-full bg-black/40 px-5 py-2 text-[10px] font-medium tracking-[0.3em] uppercase text-white/80 backdrop-blur-md border border-white/10">
-                                Sold out
+                                {t("soldOut")}
                             </span>
                         ) : (
                             <>
                                 {dish.topRated && (
                                     <span className="rounded-full bg-gradient-to-r from-chero-accent/90 to-chero-accent/70 px-5 py-2 text-[10px] font-semibold tracking-[0.3em] uppercase text-[#050B10] shadow-[0_4px_20px_rgba(204,168,118,0.3)] backdrop-blur-md">
-                                        Chef’s pick
+                                        {t("bestseller")}
+                                    </span>
+                                )}
+                                {dish.chefsPick && (
+                                    <span className="rounded-full border border-chero-accent/50 bg-black/40 px-5 py-2 text-[10px] font-medium tracking-[0.3em] uppercase text-chero-accent backdrop-blur-md">
+                                        {t("chefsPick")}
                                     </span>
                                 )}
                                 {dish.vegetarian && (
                                     <span className="rounded-full bg-black/40 px-5 py-2 text-[10px] font-medium tracking-[0.3em] uppercase text-white/80 backdrop-blur-md border border-white/10">
-                                        Veg
+                                        {t("veg")}
                                     </span>
                                 )}
                             </>
@@ -112,11 +120,24 @@ export default function DishDetailsModal({
                             </h2>
 
                             {!soldOut && (
-                                <div className="flex items-center gap-6">
-                                    <div className="h-px w-12 bg-chero-accent/50" />
-                                    <div className="text-xl md:text-2xl font-light tracking-widest text-chero-accent">
-                                        {formatPrice(dish.priceMinor, dish.currency)}
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex items-center gap-6">
+                                        <div className="h-px w-12 bg-chero-accent/50" />
+                                        <div className="text-xl md:text-2xl font-light tracking-widest text-chero-accent flex flex-wrap items-baseline gap-3">
+                                            {formatPrice(dish.priceMinor, dish.currency)}
+                                            {dish.priceLabel && <span className="text-xs font-sans tracking-widest opacity-60 uppercase font-medium">{dish.priceLabel}</span>}
+                                        </div>
                                     </div>
+
+                                    {dish.priceVariants && dish.priceVariants.map((v, i) => (
+                                        <div key={i} className="flex items-center gap-6">
+                                            <div className="h-px w-12 bg-transparent" />
+                                            <div className="text-xl md:text-2xl font-light tracking-widest text-chero-accent/80 flex flex-wrap items-baseline gap-3">
+                                                {formatPrice(v.priceMinor, dish.currency)}
+                                                {v.label && <span className="text-xs font-sans tracking-widest opacity-60 uppercase font-medium">{v.label}</span>}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                         </div>

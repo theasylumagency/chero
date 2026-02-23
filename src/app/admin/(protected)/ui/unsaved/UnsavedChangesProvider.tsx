@@ -38,6 +38,7 @@ type Ctx = {
     confirm: (opts: Omit<ConfirmDialog, "kind">) => Promise<ConfirmResult>;
     promptUnsaved: (opts?: Partial<Omit<UnsavedDialog, "kind">>) => Promise<UnsavedResult>;
     alert: (opts: Omit<AlertDialog, "kind">) => Promise<void>;
+    toast: (msg: string, type?: "success" | "error") => void;
 };
 
 const UnsavedCtx = createContext<Ctx | null>(null);
@@ -53,6 +54,8 @@ export default function UnsavedChangesProvider({ children }: { children: React.R
 
     const [dialog, setDialog] = useState<Dialog | null>(null);
     const resolverRef = useRef<((v: any) => void) | null>(null);
+
+    const [toastMsg, setToastMsg] = useState<{ text: string, type: "success" | "error" } | null>(null);
 
     // Standard browser prompt on refresh/close
     useEffect(() => {
@@ -114,6 +117,11 @@ export default function UnsavedChangesProvider({ children }: { children: React.R
                     buttonText: opts.buttonText ?? "OK",
                 });
             },
+
+            toast: (text, type = "success") => {
+                setToastMsg({ text, type });
+                setTimeout(() => setToastMsg(null), 3000);
+            }
         };
     }, [dirty]);
 
@@ -158,6 +166,27 @@ export default function UnsavedChangesProvider({ children }: { children: React.R
                             </div>
                         )}
                     </div>
+                </div>
+            )}
+
+            {toastMsg && (
+                <div style={{
+                    position: "fixed",
+                    bottom: 32,
+                    right: 32,
+                    background: toastMsg.type === "success" ? "#4caf50" : "#f44336",
+                    color: "white",
+                    padding: "16px 24px",
+                    borderRadius: "8px",
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+                    zIndex: 9999,
+                    fontWeight: 600,
+                    letterSpacing: "0.5px",
+                    transition: "all 0.3s ease-out",
+                    opacity: 1,
+                    transform: "translateY(0)"
+                }}>
+                    {toastMsg.text}
                 </div>
             )}
         </UnsavedCtx.Provider>

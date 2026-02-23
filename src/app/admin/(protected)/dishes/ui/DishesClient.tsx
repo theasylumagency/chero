@@ -1,19 +1,36 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { Category, Dish, Lang } from "@/lib/menuStore";
 import SortableList from "../../ui/SortableList";
 import { useUnsavedChanges } from "../../ui/unsaved/UnsavedChangesProvider";
 import GuardedLink from "../../ui/unsaved/GuardedLink";
 
-type SnapshotRow = { id: string; order: number; status: "active" | "hidden" };
+type SnapshotRow = {
+    id: string;
+    order: number;
+    status: "active" | "hidden";
+    vegetarian: boolean;
+    topRated: boolean;
+    chefsPick: boolean;
+    soldOut: boolean;
+};
 
 function snapshotForCategory(all: Dish[], categoryId: string): SnapshotRow[] {
     return all
         .filter((d) => d.categoryId === categoryId)
         .slice()
         .sort((a, b) => a.order - b.order)
-        .map((d) => ({ id: d.id, order: d.order, status: d.status }));
+        .map((d) => ({
+            id: d.id,
+            order: d.order,
+            status: d.status,
+            vegetarian: !!d.vegetarian,
+            topRated: !!d.topRated,
+            chefsPick: !!d.chefsPick,
+            soldOut: !!d.soldOut
+        }));
 }
 
 function sameSnapshot(a: SnapshotRow[], b: SnapshotRow[]) {
@@ -22,6 +39,10 @@ function sameSnapshot(a: SnapshotRow[], b: SnapshotRow[]) {
         if (a[i].id !== b[i].id) return false;
         if (a[i].order !== b[i].order) return false;
         if (a[i].status !== b[i].status) return false;
+        if (a[i].vegetarian !== b[i].vegetarian) return false;
+        if (a[i].topRated !== b[i].topRated) return false;
+        if (a[i].chefsPick !== b[i].chefsPick) return false;
+        if (a[i].soldOut !== b[i].soldOut) return false;
     }
     return true;
 }
@@ -32,11 +53,17 @@ function normalizeOrder(list: Dish[]) {
 
 export default function DishesClient({ categories, dishes }: { categories: Category[]; dishes: Dish[] }) {
     const { setDirty: setGlobalDirty, promptUnsaved, confirm, alert } = useUnsavedChanges();
+    const searchParams = useSearchParams();
+    const defaultCatId = searchParams.get("category");
 
     const catsSorted = useMemo(() => [...categories].sort((a, b) => a.order - b.order), [categories]);
 
     const [lang, setLang] = useState<Lang>("ka");
-    const [catId, setCatId] = useState(catsSorted[0]?.id ?? "");
+
+    // Ensure defaultCatId is valid, otherwise fallback
+    const validCatId = defaultCatId && catsSorted.some(c => c.id === defaultCatId) ? defaultCatId : (catsSorted[0]?.id ?? "");
+    const [catId, setCatId] = useState(validCatId);
+
     const [items, setItems] = useState<Dish[]>(dishes);
     const [saving, setSaving] = useState(false);
 
@@ -73,7 +100,15 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
         setSaving(true);
 
         const normalized = normalizeOrder(filtered);
-        const payload: SnapshotRow[] = normalized.map((d) => ({ id: d.id, order: d.order, status: d.status }));
+        const payload: SnapshotRow[] = normalized.map((d) => ({
+            id: d.id,
+            order: d.order,
+            status: d.status,
+            vegetarian: !!d.vegetarian,
+            topRated: !!d.topRated,
+            chefsPick: !!d.chefsPick,
+            soldOut: !!d.soldOut
+        }));
 
         const r = await fetch("/api/admin/dishes/bulk", {
             method: "POST",
@@ -89,7 +124,7 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
             return false;
         }
 
-        // Apply normalized order/status to local state for this category
+        // Apply normalized order/status/booleans to local state for this category
         const byId = new Map(payload.map((x) => [x.id, x]));
         setItems((prev) =>
             prev
@@ -97,7 +132,15 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                 .map((d) => {
                     if (d.categoryId !== catId) return d;
                     const u = byId.get(d.id)!;
-                    return { ...d, order: u.order, status: u.status };
+                    return {
+                        ...d,
+                        order: u.order,
+                        status: u.status,
+                        vegetarian: u.vegetarian,
+                        topRated: u.topRated,
+                        chefsPick: u.chefsPick,
+                        soldOut: u.soldOut
+                    };
                 })
         );
 
@@ -120,7 +163,15 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
             const currentById = new Map(items.map((d) => [d.id, d]));
             for (const row of payload) {
                 const full = currentById.get(row.id);
-                if (full) next[row.id] = { ...full, order: row.order, status: row.status };
+                if (full) next[row.id] = {
+                    ...full,
+                    order: row.order,
+                    status: row.status,
+                    vegetarian: row.vegetarian,
+                    topRated: row.topRated,
+                    chefsPick: row.chefsPick,
+                    soldOut: row.soldOut
+                };
             }
             return next;
         });
@@ -140,7 +191,16 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                 const fallback = items.find((d) => d.id === row.id);
                 const full = base ?? fallback;
                 if (!full) return null as any;
-                return { ...full, categoryId: catId, order: row.order, status: row.status };
+                return {
+                    ...full,
+                    categoryId: catId,
+                    order: row.order,
+                    status: row.status,
+                    vegetarian: row.vegetarian,
+                    topRated: row.topRated,
+                    chefsPick: row.chefsPick,
+                    soldOut: row.soldOut
+                };
             })
             .filter(Boolean);
 
@@ -189,6 +249,12 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
     function toggleLocalStatus(id: string) {
         setItems((prev) =>
             prev.map((d) => (d.id === id ? { ...d, status: d.status === "active" ? "hidden" : "active" } : d))
+        );
+    }
+
+    function toggleLocalBoolean(id: string, field: "vegetarian" | "topRated" | "chefsPick" | "soldOut") {
+        setItems((prev) =>
+            prev.map((d) => (d.id === id ? { ...d, [field]: !d[field] } : d))
         );
     }
 
@@ -265,17 +331,14 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                         onReorder={(next) => applyLocalOrder(next)}
                         renderRow={(d, { isDragging, isOver, overPos, dragProps }) => (
                             <div
-                                {...dragProps}
                                 className="row"
                                 style={{
                                     opacity: isDragging ? 0.6 : 1,
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr 110px 120px 90px 90px",
-                                    gap: 10,
-                                    alignItems: "center",
                                     padding: 12,
-                                    cursor: "grab",
                                     position: "relative",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 12
                                 }}
                             >
                                 {isOver && overPos && (
@@ -294,26 +357,78 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                                     />
                                 )}
 
-                                <div>
-                                    <div style={{ fontWeight: 700 }}>{d.title[lang] || "(empty)"}</div>
-                                    <div style={{ opacity: 0.7, fontSize: 12 }}>{d.id}</div>
+                                <div
+                                    {...dragProps}
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "1fr 110px 120px 90px 90px",
+                                        gap: 10,
+                                        alignItems: "center",
+                                        cursor: "grab",
+                                    }}
+                                >
+                                    <div>
+                                        <div style={{ fontWeight: 700 }}>{d.title[lang] || "(empty)"}</div>
+                                        <div style={{ opacity: 0.7, fontSize: 12 }}>{d.id}</div>
+                                    </div>
+
+                                    <button className="btn" type="button" draggable={false} onClick={() => toggleLocalStatus(d.id)}>
+                                        {d.status}
+                                    </button>
+
+                                    <div style={{ textAlign: "right" }}>
+                                        {(d.priceMinor / 100).toFixed(2)} {d.currency}
+                                    </div>
+
+                                    <GuardedLink className="btn" href={`/admin/dishes/edit/${d.id}`} onSave={saveCurrentCategory}>
+                                        Edit
+                                    </GuardedLink>
+
+                                    <button className="btn" type="button" draggable={false} onClick={() => deleteLocalDish(d.id)}>
+                                        Delete
+                                    </button>
                                 </div>
+                                <div style={{ display: "flex", gap: 14, flexWrap: "wrap", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 12 }}>
+                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={d.vegetarian}
+                                            onChange={() => toggleLocalBoolean(d.id, 'vegetarian')}
+                                            style={{ marginRight: 8 }}
+                                        />
+                                        Vegetarian
+                                    </label>
 
-                                <button className="btn" type="button" draggable={false} onClick={() => toggleLocalStatus(d.id)}>
-                                    {d.status}
-                                </button>
+                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={d.topRated}
+                                            onChange={() => toggleLocalBoolean(d.id, 'topRated')}
+                                            style={{ marginRight: 8 }}
+                                        />
+                                        Bestseller
+                                    </label>
 
-                                <div style={{ textAlign: "right" }}>
-                                    {(d.priceMinor / 100).toFixed(2)} {d.currency}
+                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={d.chefsPick}
+                                            onChange={() => toggleLocalBoolean(d.id, 'chefsPick')}
+                                            style={{ marginRight: 8 }}
+                                        />
+                                        Chef's Pick
+                                    </label>
+
+                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={d.soldOut}
+                                            onChange={() => toggleLocalBoolean(d.id, 'soldOut')}
+                                            style={{ marginRight: 8 }}
+                                        />
+                                        Sold Out
+                                    </label>
                                 </div>
-
-                                <GuardedLink className="btn" href={`/admin/dishes/edit/${d.id}`} onSave={saveCurrentCategory}>
-                                    Edit
-                                </GuardedLink>
-
-                                <button className="btn" type="button" draggable={false} onClick={() => deleteLocalDish(d.id)}>
-                                    Delete
-                                </button>
                             </div>
                         )}
                     />

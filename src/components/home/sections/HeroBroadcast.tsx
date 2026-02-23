@@ -62,7 +62,7 @@ export default function HeroBroadcast() {
             {/* RIGHT THIRD: Photo */}
             <div className="relative z-10 w-full lg:w-1/3 h-[45dvh] lg:h-[100dvh] flex flex-col justify-end lg:justify-center overflow-hidden">
                 <figure className="relative w-full h-full overflow-hidden group">
-                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#03070A] via-[#03070A]/40 to-transparent z-10 lg:w-[30%] h-[30%] lg:h-full top-0 lg:left-0" />
+                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#03070A] via-[#03070A]/40 to-transparent z-10 lg:w-[10%] h-[30%] lg:h-full top-0 lg:left-0" />
                     <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#03070A] to-transparent z-10 lg:hidden" />
 
                     <Image

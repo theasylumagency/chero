@@ -8,9 +8,12 @@ export type PublicDish = {
     description: string;
     story: string;
     priceMinor: number;
+    priceLabel: string;
+    priceVariants: { priceMinor: number; label: string }[];
     currency: "GEL";
     vegetarian: boolean;
     topRated: boolean;
+    chefsPick: boolean;
     soldOut: boolean;
     photo: { full: string; small: string } | null;
 };

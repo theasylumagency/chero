@@ -6408,56 +6408,40 @@
       "topRated": false,
       "soldOut": false,
       "story": {
-        "ka": "„სტოლიჩნაია“ რუსული არაყიდან ყველაზე ცნობილია. მიუხედავად იმისა, რომ ის მე-20 საუკუნის პირველი ნახევრიდან იწარმოება, ბრენდის წარმოშობასთან დაკავშირებით მრავალი ურთიერთგამომრიცხავი თეორია არსებობს. სხვადასხვა ავტორიტეტული წყარო, მათ შორის მემუარები, არყის შექმნის ექვს თარიღს ასახელებს, რომლებიც 1938 წლიდან 1953 წლამდე პერიოდს მოიცავს.",
-        "en": "Stolichnaya is a vodka made of wheat and rye grain. It originated in the Soviet Union in 1938. There are two versions of the vodka: the version found outside Russia is made in Latvia, while the version found inside Russia is made there.",
-        "ru": "«Столичная» – самая известная из российских водок. Хотя её производят с первой половины XX века, существует немало взаимоисключающих версий появления бренда. В разных авторитетных источниках, включая мемуары, указано 6 дат создания водки, в диапазоне между 1938 и 1953 годом."
+        "ka": "",
+        "en": "",
+        "ru": ""
       },
       "title": {
         "ka": "სტალიჩნაია",
-        "en": "Stoli",
-        "ru": "Сталичная"
+        "en": "Stoli.vodka",
+        "ru": "Столи.водка"
       },
       "description": {
         "ka": "",
         "en": "",
         "ru": ""
       },
-      "photo": {
-        "full": "dish_dish_0194_1600.webp",
-        "small": "dish_dish_0194_800.webp"
-      },
       "priceLabel": {
-        "ka": "50 მლ",
-        "en": "50 ml",
-        "ru": "50 мл"
+        "ka": "50ml",
+        "en": "50ml",
+        "ru": "50ml"
       },
       "priceVariants": [
         {
           "priceMinor": 5000,
           "label": {
-            "ka": "500 მლ",
-            "en": "500 ml",
-            "ru": "500 мл"
-          }
-        },
-        {
-          "priceMinor": 7000,
-          "label": {
-            "ka": "700 მლ",
-            "en": "700 ml",
-            "ru": "700 мл"
-          }
-        },
-        {
-          "priceMinor": 8000,
-          "label": {
-            "ka": "1 ლ",
-            "en": "1 L",
-            "ru": "1 л"
+            "ka": "500ml",
+            "en": "500ml",
+            "ru": "500ml"
           }
         }
       ],
-      "chefsPick": false
+      "chefsPick": false,
+      "photo": {
+        "full": "dish_dish_0194_1600.webp",
+        "small": "dish_dish_0194_800.webp"
+      }
     },
     {
       "id": "dish_0195",
@@ -6470,9 +6454,9 @@
       "topRated": false,
       "soldOut": false,
       "story": {
-        "ka": "წარმოება 1872 წელს ნემირივიში (დღევანდელ უკრაინაში), დაიწყო, უდიდესი დისტილაციის ქარხნის გახსნით. თაობების განმავლობაში რეგიონმა შეინარჩუნა თავისი ტრადიციები. ნემიროვი შთაგონებას იღებს რეგიონის უნიკალური თვისებებიდან, როგორიცაა სუფთა ბუნებრივი წყალი, ნაყოფიერი მიწები და ადგილობრივი დისტილაციის მეთოდების ოსტატობა.",
-        "en": "Production began in 1872 in the town of Nemyriv with the opening of the largest distillery in Podillia. For generations, the region has preserved its artisanal traditions, which are upheld to this day. Nemiroff draws inspiration from the unique attributes of the area, such as pure natural water, fertile lands, and the craftsmanship of local distillation methods.",
-        "ru": "Производство началось в 1872 году в Немирове (на территории современной Украины) с открытием крупнейшего винокуренного завода. На протяжении поколений регион сохранял свои традиции. Немиров черпает вдохновение из уникальных особенностей региона, таких как чистая природная вода, плодородные земли и мастерство местных методов дистилляции."
+        "ka": "",
+        "en": "",
+        "ru": ""
       },
       "title": {
         "ka": "ნემიროვი",
@@ -6483,10 +6467,6 @@
         "ka": "",
         "en": "",
         "ru": ""
-      },
-      "photo": {
-        "full": "dish_dish_0195_1600.webp",
-        "small": "dish_dish_0195_800.webp"
       },
       "priceLabel": {
         "ka": "50ml",
@@ -6526,7 +6506,8 @@
             "ru": "1 L"
           }
         }
-      ]
+      ],
+      "chefsPick": false
     },
     {
       "id": "dish_0196",
@@ -6634,14 +6615,6 @@
       "status": "active",
       "priceMinor": 2000,
       "currency": "GEL",
-      "vegetarian": false,
-      "topRated": false,
-      "soldOut": false,
-      "story": {
-        "ka": "უნიკალური ფრანგული არაყი „გრეი გუსი“ კონიაკის რეგიონში იწარმოება. იგი იმავე არტეზიული წყლის გამოყენებით მზადდება, რომელიც ცნობილი სახლების კონიაკისთვის გამოიყენება. შესაძლოა, სწორედ ამიტომ არის არაყი ასეთი ნაზი და გემრიელი.",
-        "en": "Grey Goose is a brand of vodka produced in France. It was created in the 1990s by American businessman Sidney Frank, who sold it to the multinational company Bacardi in 2004. The Maître de Chai for Grey Goose is François Thibault, who developed the original recipe for the vodka in Cognac.",
-        "ru": "Уникальная французская водка Grey Goose производится в округе Коньяк. Для ее изготовления используется та же артезианская вода, что и для коньяков знаменитых Домов. Может быть, поэтому водка получается столь мягкой и вкусной."
-      },
       "title": {
         "ka": "გრეიგუსი",
         "en": "Grey Goose",
@@ -6652,34 +6625,21 @@
         "en": "",
         "ru": ""
       },
-      "photo": {
-        "full": "dish_dish_0199_1600.webp",
-        "small": "dish_dish_0199_800.webp"
+      "vegetarian": false,
+      "topRated": false,
+      "soldOut": false,
+      "story": {
+        "ka": "",
+        "en": "",
+        "ru": ""
       },
+      "chefsPick": false,
       "priceLabel": {
         "ka": "",
         "en": "",
         "ru": ""
       },
-      "priceVariants": [
-        {
-          "priceMinor": 15000,
-          "label": {
-            "ka": "500 მლ",
-            "en": "500 ml",
-            "ru": "500 мл"
-          }
-        },
-        {
-          "priceMinor": 30000,
-          "label": {
-            "ka": "1 ლ",
-            "en": "1 L",
-            "ru": "1 л"
-          }
-        }
-      ],
-      "chefsPick": false
+      "priceVariants": []
     },
     {
       "id": "dish_0200",
@@ -6917,5 +6877,5 @@
       "priceVariants": []
     }
   ],
-  "updatedAt": "2026-02-23T14:51:56.108Z"
+  "updatedAt": "2026-02-23T14:26:10.268Z"
 }

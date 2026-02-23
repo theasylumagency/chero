@@ -74,6 +74,11 @@ export default function DishCard({
                         <>
                             {dish.topRated && (
                                 <span className="rounded-full bg-gradient-to-r from-chero-accent/90 to-chero-accent/70 px-4 py-1.5 text-[9px] font-semibold tracking-[0.25em] uppercase text-[#050B10] shadow-[0_4px_20px_rgba(204,168,118,0.3)] backdrop-blur-md">
+                                    {t("bestseller")}
+                                </span>
+                            )}
+                            {dish.chefsPick && (
+                                <span className="rounded-full border border-chero-accent/50 bg-black/40 px-4 py-1.5 text-[9px] font-medium tracking-[0.25em] uppercase text-chero-accent backdrop-blur-md">
                                     {t("chefsPick")}
                                 </span>
                             )}
@@ -96,10 +101,14 @@ export default function DishCard({
                         </h3>
 
                         {!soldOut && (
-                            <div className="flex items-center gap-3">
-                                <div className="hidden sm:block h-[1px] w-8 bg-white/10" />
-                                <div className="shrink-0 text-sm font-light tracking-wide text-chero-accent/90">
-                                    {formatPrice(dish.priceMinor, dish.currency)}
+                            <div className="flex flex-col items-end gap-1 shrink-0">
+                                <div className="flex items-center gap-3">
+                                    <div className="hidden sm:block h-[1px] w-8 bg-white/10" />
+                                    <div className="flex items-baseline gap-1.5 text-sm font-light tracking-wide text-chero-accent/90">
+                                        {formatPrice(dish.priceMinor, dish.currency)}
+                                        {dish.priceVariants?.length > 0 && <span className="text-chero-accent/60">+</span>}
+                                        {dish.priceLabel && <span className="text-[10px] uppercase font-medium tracking-widest opacity-70"> • {dish.priceLabel}</span>}
+                                    </div>
                                 </div>
                             </div>
                         )}

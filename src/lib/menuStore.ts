@@ -18,9 +18,12 @@ export type Dish = {
     status: Status;
     vegetarian: boolean;
     topRated: boolean;
+    chefsPick: boolean;
     soldOut: boolean;
     story: Record<Lang, string>;
     priceMinor: number;       // 1890 = 18.90
+    priceLabel: Record<Lang, string>;
+    priceVariants: { priceMinor: number; label: Record<Lang, string> }[];
     currency: "GEL";
     title: Record<Lang, string>;
     description: Record<Lang, string>;
@@ -45,9 +48,17 @@ function normalizeDish(d: any): Dish {
 
         vegetarian: !!d?.vegetarian,
         topRated: !!d?.topRated,
+        chefsPick: !!d?.chefsPick,
         soldOut: !!d?.soldOut,
 
         story: normalizeLangRecord(d?.story),
+        priceLabel: normalizeLangRecord(d?.priceLabel),
+        priceVariants: Array.isArray(d?.priceVariants)
+            ? d.priceVariants.map((v: any) => ({
+                priceMinor: Number(v.priceMinor) || 0,
+                label: normalizeLangRecord(v?.label)
+            }))
+            : [],
     };
 }
 
@@ -116,9 +127,15 @@ export async function getPublicMenu(lang: Lang) {
             description: d.description[lang] ?? "",
             story: d.story?.[lang] ?? "",
             priceMinor: d.priceMinor,
+            priceLabel: d.priceLabel?.[lang] || "",
+            priceVariants: (d.priceVariants || []).map(v => ({
+                priceMinor: v.priceMinor,
+                label: v.label?.[lang] || ""
+            })),
             currency: d.currency,
             vegetarian: !!d.vegetarian,
             topRated: !!d.topRated,
+            chefsPick: !!d.chefsPick,
             soldOut: !!d.soldOut,
             photo: d.photo
                 ? {

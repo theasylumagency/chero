@@ -8,18 +8,18 @@ export default function Highlights() {
 
     const picks = [
         {
-            name: "Khachapuri Adjaruli",
-            story: "Boat-shaped, sea-ready comfort: cheese, butter, egg — born for the Black Sea coast.",
+            name: t("items.adjaruli.name"),
+            story: t("items.adjaruli.story"),
             image: "/highlights/adjaruli.png"
         },
         {
-            name: "Khinkali",
-            story: "Mountain logic: hot broth inside a dumpling — hold the top, sip first, then bite.",
+            name: t("items.khinkali.name"),
+            story: t("items.khinkali.story"),
             image: "/highlights/khinkali.webp"
         },
         {
-            name: "Mtsvadi",
-            story: "Char, smoke, and patience — the simplest ritual that never stopped working in Georgia.",
+            name: t("items.mtsvadi.name"),
+            story: t("items.mtsvadi.story"),
             image: "/highlights/mcvadi.webp"
         }
     ];

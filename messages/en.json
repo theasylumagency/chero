@@ -9,12 +9,26 @@
             "ctaFind": "Find us"
         },
         "taste": {
-            "title": "Chef’s Top Picks",
+            "title": "Taste of Georgia",
             "body": "Chero is where tradition doesn’t pose — it simply works."
         },
         "highlights": {
             "title": "Tonight’s highlights",
-            "hint": "A short story for every dish — at a glance."
+            "hint": "A short story for every dish — at a glance.",
+            "items": {
+                "adjaruli": {
+                    "name": "Adjaruli Khachapuri",
+                    "story": "Boat-shaped, sea-ready comfort: cheese, butter, egg — born for the Black Sea coast."
+                },
+                "khinkali": {
+                    "name": "Khinkali",
+                    "story": "Mountain logic: hot broth inside a dumpling — hold the top, sip first, then bite."
+                },
+                "mtsvadi": {
+                    "name": "Mtsvadi",
+                    "story": "Char, smoke, and patience — the simplest ritual that never stopped working in Georgia."
+                }
+            }
         },
         "menuSignal": {
             "title": "Menu signal",
@@ -32,6 +46,7 @@
         },
         "final": {
             "line": "The door is open.\nThe rest is simple.",
+            "body": "Experience a culinary journey where every detail is crafted for the senses. From the salt-kissed breezes of the Black Sea to the meticulously aged Georgian wines, every moment at Kobuleti is a testament to the art of fine dining.",
             "menu": "Menu",
             "directions": "Directions",
             "call": "Call"
@@ -41,7 +56,16 @@
         "ui": {
             "title": "Menu",
             "searchPlaceholder": "Search a dish…",
-            "openFull": "Open full menu"
+            "openFull": "Open full menu",
+            "categories": "Categories",
+            "count": "Count",
+            "items": "Items"
+        },
+        "hero": {
+            "title": "Taste Georgia",
+            "kicker": "A taste that needs no words.",
+            "subtitle": "Tradition that simply works.",
+            "cta": "Menu"
         },
         "dishCard": {
             "soldOut": "sold out",

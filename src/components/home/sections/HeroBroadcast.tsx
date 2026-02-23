@@ -3,137 +3,95 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import LocaleSwitch from "@/components/i18n/LocaleSwitch";
-import { useState, useRef, MouseEvent } from "react";
-import { useLocale } from "next-intl";
 
 export default function HeroBroadcast() {
     const t = useTranslations("home.hero");
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-    const sectionRef = useRef<HTMLElement>(null);
-    const locale = useLocale();
-
-    const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
-        if (!sectionRef.current) return;
-        const rect = sectionRef.current.getBoundingClientRect();
-        setMousePos({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-        });
-    };
 
     return (
-        <section
-            ref={sectionRef}
-            onMouseMove={handleMouseMove}
-            className="relative overflow-hidden bg-[#071018]"
-        >
-            {/* Deep Ambient Background */}
-            <div className="absolute inset-0 bg-[#050B10] pointer-events-none z-0" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#0C1821_0%,transparent_80%)] pointer-events-none z-0" />
+        <section className="relative min-h-[100dvh] w-full bg-[#03070A] overflow-hidden flex flex-col lg:flex-row font-serif selection:bg-[#CCA876]/30 selection:text-white">
+            {/* Global Refined Noise & Vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,32,44,0.3)_0%,transparent_70%)] pointer-events-none z-0" />
+            <div className="absolute inset-0 hero-noise pointer-events-none opacity-[0.25] mix-blend-overlay z-0" />
 
-            {/* Ethereal Shore/Wave Effect */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-90" aria-hidden>
-                {/* Wave 1 */}
-                <div className="absolute bottom-[-20%] left-[-10%] w-[120%] h-[80%] bg-[radial-gradient(ellipse_at_bottom,rgba(16,35,46,0.6)_0%,transparent_70%)] animate-wave-swell mix-blend-screen blur-3xl opacity-0" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[120%] h-[70%] bg-[radial-gradient(ellipse_at_bottom,rgba(204,168,118,0.12)_0%,transparent_60%)] animate-wave-foam mix-blend-plus-lighter blur-2xl opacity-0" />
-
-                {/* Wave 2 */}
-                <div className="absolute bottom-[-20%] right-[-10%] w-[120%] h-[80%] bg-[radial-gradient(ellipse_at_bottom,rgba(26,50,65,0.5)_0%,transparent_70%)] animate-wave-swell-delayed mix-blend-screen blur-3xl opacity-0" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[120%] h-[70%] bg-[radial-gradient(ellipse_at_bottom,rgba(204,168,118,0.1)_0%,transparent_60%)] animate-wave-foam-delayed mix-blend-plus-lighter blur-2xl opacity-0" />
+            {/* Top Bar for Locale Switch */}
+            <div className="absolute top-0 right-0 w-full p-6 lg:p-10 z-50 flex justify-end">
+                <LocaleSwitch />
             </div>
 
-            {/* Interactive Spotlight */}
-            <div
-                className="absolute inset-0 pointer-events-none transition-opacity duration-700 ease-out z-0 mix-blend-screen"
-                style={{
-                    background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(204, 168, 118, 0.05), transparent 40%)`,
-                    opacity: mousePos.x === 0 && mousePos.y === 0 ? 0 : 1
-                }}
-            />
-
-            {/* Fine dining noise texture */}
-            <div className="absolute inset-0 hero-noise pointer-events-none opacity-[0.14] mix-blend-overlay z-0" />
-
-            {/* Cinematic Vignette */}
-            <div className="absolute inset-0 pointer-events-none z-10 bg-[radial-gradient(circle_at_50%_40%,transparent_0%,rgba(5,11,16,0.6)_60%,rgba(5,11,16,1)_100%)]" />
-            {/* Top bar */}
-            <div className="relative mx-auto max-w-6xl px-6 pt-6 z-30">
-                <div className="flex items-center justify-end animate-fade-in">
-                    <LocaleSwitch />
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="relative mx-auto flex min-h-[92vh] max-w-6xl flex-col items-center justify-center px-6 text-center z-20">
-                <div className="animate-fade-in-up mb-8 drop-shadow-2xl hover:scale-[1.02] transition-transform duration-700">
+            {/* LEFT THIRD: Texts and Logo */}
+            <div className="relative z-20 flex w-full lg:w-1/3 flex-col justify-center px-8 sm:px-12 lg:pl-16 xl:pl-24 pt-32 pb-12 lg:py-0 lg:h-[100dvh]">
+                <div className="animate-fade-in-up drop-shadow-2xl opacity-0" style={{ animationFillMode: 'forwards' }}>
                     <Image
                         src="/brand/logo-white.svg"
                         alt="Chero Logo"
                         width={820}
                         height={340}
                         priority
-                        className="mx-auto h-auto w-[280px] sm:w-[500px]"
+                        className="w-[180px] sm:w-[240px] lg:w-[320px] h-auto object-contain transform origin-left transition-transform duration-[1.5s] ease-out hover:scale-[1.03]"
                     />
                 </div>
 
-                <p className="max-w-2xl text-lg sm:text-2xl text-white/90 font-serif tracking-wide leading-relaxed animate-fade-in-up drop-shadow-md" style={{ animationDelay: '200ms' }}>
-                    {t("tagline")}<br />{t("tagline2")}<br />{t("tagline3")}
-                </p>
+                <div className="mt-12 lg:mt-24 flex flex-col space-y-6 lg:space-y-8 border-l-[0.5px] border-white/20 pl-6 lg:pl-10 relative">
+                    <div className="absolute -left-[0.5px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[#CCA876]/40 to-transparent opacity-0 animate-pulse-slow" style={{ animationDelay: '2s' }} />
 
-                <div className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                    <a href={`/${locale}/menu`}
-                        className="group relative overflow-hidden rounded-full bg-[#CCA876] px-8 py-4 text-sm font-semibold tracking-widest uppercase text-[#050B10] shadow-[0_0_40px_-10px_rgba(204,168,118,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_60px_-15px_rgba(204,168,118,0.6)]"
-                    >
-                        <span className="relative z-10">{t("ctaMenu")}</span>
-                        <div className="absolute inset-0 translate-y-[100%] bg-white/20 transition-transform duration-300 group-hover:translate-y-0" />
-                    </a>
-                    <a
-                        href="#location"
-                        className="group rounded-full border border-white/20 bg-white/5 backdrop-blur-md px-8 py-4 text-sm font-semibold tracking-widest uppercase text-white/90 transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:scale-105"
-                    >
-                        {t("ctaFind")}
-                    </a>
+                    <p className="max-w-[280px] text-[10px] sm:text-xs lg:text-sm text-white/70 tracking-[0.25em] uppercase leading-[2] animate-fade-in-up opacity-0" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
+                        {t("tagline")}
+                    </p>
+                    <p className="max-w-[280px] text-[10px] sm:text-xs lg:text-sm text-[#CCA876]/90 tracking-[0.25em] uppercase leading-[2] animate-fade-in-up opacity-0" style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}>
+                        {t("tagline2")}
+                    </p>
+                    <p className="max-w-[280px] text-[10px] sm:text-xs lg:text-sm text-white/50 tracking-[0.25em] uppercase leading-[2] animate-fade-in-up opacity-0" style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}>
+                        {t("tagline3")}
+                    </p>
                 </div>
+            </div>
 
-                {/* Ambient scroll indicator */}
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 animate-fade-in cursor-default" style={{ animationDelay: '800ms' }}>
-                    <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+            {/* CENTRAL THIRD: Empty / Scroll Indicator */}
+            <div className="relative z-20 flex w-full lg:w-1/3 flex-col items-center justify-end pb-12 lg:pb-20 lg:h-[100dvh]">
+                <div className="flex flex-col items-center gap-6 lg:gap-8 animate-fade-in opacity-0 cursor-default" style={{ animationDelay: '1200ms', animationFillMode: 'forwards' }}>
+                    <span className="text-[9px] lg:text-[10px] tracking-[0.5em] uppercase text-white/30 font-light font-sans">
                         {t("signal")}
+                    </span>
+                    <div className="relative h-20 lg:h-32 w-[1px] overflow-hidden flex-shrink-0">
+                        <div className="absolute inset-0 bg-white/10" />
+                        <div className="absolute top-0 left-0 w-full h-[30%] bg-gradient-to-b from-transparent via-[#CCA876] to-[#CCA876] animate-scroll-drop" />
                     </div>
-                    <div className="h-10 w-[1px] bg-gradient-to-b from-white/40 to-transparent animate-pulse-slow" />
                 </div>
+            </div>
+
+            {/* RIGHT THIRD: Photo */}
+            <div className="relative z-10 w-full lg:w-1/3 h-[45dvh] lg:h-[100dvh] flex flex-col justify-end lg:justify-center overflow-hidden">
+                <figure className="relative w-full h-full overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#03070A] via-[#03070A]/40 to-transparent z-10 lg:w-[30%] h-[30%] lg:h-full top-0 lg:left-0" />
+                    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#03070A] to-transparent z-10 lg:hidden" />
+
+                    <Image
+                        src="/photos/hero_image.webp"
+                        alt="Finest Gastronomy"
+                        fill
+                        priority
+                        className="object-cover object-center scale-105 transition-transform duration-[25s] ease-out group-hover:scale-110"
+                        sizes="(max-width: 1024px) 100vw, 33vw"
+                    />
+
+                    <div className="absolute inset-0 shadow-[inset_0_0_120px_rgba(3,7,10,0.8)] z-20 pointer-events-none mix-blend-multiply" />
+                </figure>
             </div>
 
             <style jsx global>{`
                 .hero-noise {
-                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
                 }
                 
-                .animate-wave-swell {
-                    animation: waveSwell 18s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                }
-                .animate-wave-foam {
-                    animation: waveFoam 18s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                }
-                .animate-wave-swell-delayed {
-                    animation: waveSwell 18s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                    animation-delay: -9s;
-                }
-                .animate-wave-foam-delayed {
-                    animation: waveFoam 18s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                    animation-delay: -9s;
+                @keyframes scroll-drop {
+                    0% { transform: translateY(-100%); opacity: 0; }
+                    10% { opacity: 1; }
+                    80% { opacity: 1; }
+                    100% { transform: translateY(300%); opacity: 0; }
                 }
 
-                @keyframes waveSwell {
-                    0%, 100% { transform: translateY(20%) scaleY(0.8); opacity: 0; }
-                    30% { transform: translateY(-5%) scaleY(1.1); opacity: 0.8; }
-                    60% { transform: translateY(10%) scaleY(0.9); opacity: 0; }
-                }
-
-                @keyframes waveFoam {
-                    0%, 100% { transform: translateY(25%) scaleY(0.8); opacity: 0; }
-                    35% { transform: translateY(-2%) scaleY(1.15); opacity: 0.6; }
-                    65% { transform: translateY(15%) scaleY(0.9); opacity: 0; }
+                .animate-scroll-drop {
+                    animation: scroll-drop 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
                 }
             `}</style>
         </section>

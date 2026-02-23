@@ -118,14 +118,16 @@ export default function MenuClient({ menu }: { menu: PublicCategory[] }) {
     return (
         <section id="menu" className="relative min-h-screen bg-[#050B10] border-t border-white/[0.03]">
             {/* Ambient Background Glows */}
-            <div
-                aria-hidden
-                className="pointer-events-none absolute left-[15%] top-0 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-chero-accent/opacity-10 blur-[150px] opacity-40 mix-blend-screen"
-            />
-            <div
-                aria-hidden
-                className="pointer-events-none absolute right-[10%] top-[30%] h-[600px] w-[600px] translate-x-1/2 rounded-full bg-chero-accent/opacity-[0.05] blur-[120px] opacity-30 mix-blend-screen"
-            />
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div
+                    aria-hidden
+                    className="absolute left-[15%] top-0 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-chero-accent/10 blur-[150px] opacity-40 mix-blend-screen"
+                />
+                <div
+                    aria-hidden
+                    className="absolute right-[10%] top-[30%] h-[600px] w-[600px] translate-x-1/2 rounded-full bg-chero-accent/5 blur-[120px] opacity-30 mix-blend-screen"
+                />
+            </div>
 
             <div className="relative mx-auto max-w-[90rem] px-6 py-16 sm:py-24">
                 {/* Header / Sticky Tools */}

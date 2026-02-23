@@ -8,7 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["var(--font-outfit)", "ui-sans-serif", "system-ui"],
-        serif: ["var(--font-playfair)", "ui-serif", "Georgia"],
+        serif: ["var(--font-playfair)", "var(--font-bpg)", "ui-serif", "Georgia"],
       },
       colors: {
         chero: {

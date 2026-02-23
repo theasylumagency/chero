@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -10,6 +11,12 @@ const outfit = Outfit({
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+});
+
+const bpgClassic = localFont({
+  src: "../../public/fonts/bpg-classic-medium-master/fonts/bpg-classic-medium-webfont.woff2",
+  variable: "--font-bpg",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${outfit.variable} ${playfair.variable} font-sans antialiased bg-[#050B10] text-[#E0E2E5] selection:bg-amber-600/30 selection:text-white`}
+        className={`${outfit.variable} ${playfair.variable} ${bpgClassic.variable} font-sans antialiased bg-[#050B10] text-[#E0E2E5] selection:bg-amber-600/30 selection:text-white`}
       >
         {children}
       </body>

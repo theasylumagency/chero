@@ -10,7 +10,7 @@ export default function Highlights() {
         {
             name: t("items.adjaruli.name"),
             story: t("items.adjaruli.story"),
-            image: "/highlights/adjaruli.png"
+            image: "/highlights/adjaruli.webp"
         },
         {
             name: t("items.khinkali.name"),

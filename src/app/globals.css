@@ -128,6 +128,41 @@ body {
   animation: shoreShimmer 12s ease-in-out infinite;
 }
 
+@keyframes shoreSweep {
+  0% {
+    transform: translateX(-60%) skewX(-12deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: .7;
+  }
+
+  50% {
+    opacity: .35;
+  }
+
+  100% {
+    transform: translateX(160%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+.shore-sweep {
+  position: absolute;
+  inset: -25% 0;
+  width: 55%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, .10) 45%,
+      rgba(255, 255, 255, .06) 55%,
+      transparent 100%);
+  filter: blur(2px);
+  mix-blend-mode: overlay;
+  animation: shoreSweep 12s linear infinite;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
 
   .shore-band--deep,

@@ -2,6 +2,7 @@ import HeroBroadcast from "./sections/HeroBroadcast";
 import Taste1998 from "./sections/Taste1998";
 import Highlights from "./sections/Highlights";
 import MenuSignal from "./sections/MenuSignal";
+import AtmosphereGallery from "./sections/AtmosphereGallery";
 import KobuletiLocation from "./sections/KobuletiLocation";
 import FinalCTA from "./sections/FinalCTA";
 import SiteFooter from "@/components/layout/SiteFooter";
@@ -15,6 +16,7 @@ export default function HomePage() {
                 <Highlights />
             </div>
             <MenuSignal />
+            <AtmosphereGallery />
             <KobuletiLocation />
             <FinalCTA />
             <SiteFooter />

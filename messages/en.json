@@ -8,6 +8,18 @@
             "ctaMenu": "Menu",
             "ctaFind": "Find us"
         },
+        "menuSignal": {
+            "title": "A Taste of Legacy",
+            "description": "Our chef curates a dynamic experience honoring Georgian traditions while embracing refined culinary techniques.",
+            "cta": "Explore Menu"
+        },
+        "atmosphere": {
+            "title": "Our Atmosphere",
+            "subtitle": "Where Space Meets Sensation",
+            "description": "Immerse yourself in an environment designed to stimulate every sense. Our dining room blends modern elegance with timeless Georgian warmth, creating the perfect backdrop for extraordinary culinary moments.",
+            "photoText1": "Every detail is crafted for your perfect evening.",
+            "photoText2": "We create a special mood for you—not just with our interior or dishes, but with the very address itself."
+        },
         "taste": {
             "title": "Taste of Georgia",
             "body": "Chero is where tradition doesn’t pose — it simply works."
@@ -30,7 +42,7 @@
                 }
             }
         },
-        "menuSignal": {
+        "menuSearch": {
             "title": "Menu signal",
             "searchPlaceholder": "Search a dish…",
             "openFull": "Open full menu"

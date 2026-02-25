@@ -5,7 +5,7 @@ import { useLocale } from "next-intl";
 import { getPublicMenu } from "@/lib/menuStore";
 
 export default function MenuSignal() {
-    const t = useTranslations("home.menuSignal");
+    const t = useTranslations("home.menuSearch");
     const locale = useLocale();
     return (
         <section id="menu" className="relative mx-auto max-w-4xl px-6 py-24 sm:py-32">

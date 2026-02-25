@@ -29,12 +29,13 @@ export async function POST(req: NextRequest) {
         currency: "GEL",
         vegetarian: body.vegetarian ?? false,
         topRated: body.topRated ?? false,
+        chefsPick: body.chefsPick ?? false,
         soldOut: body.soldOut ?? false,
         story: body.story ?? { ka: "", en: "", ru: "" },
         title: { ka: body.title?.ka ?? "", en: body.title?.en ?? "", ru: body.title?.ru ?? "" },
         description: { ka: body.description?.ka ?? "", en: body.description?.en ?? "", ru: body.description?.ru ?? "" },
         photo: body.photo ?? (idx === -1 ? undefined : wrap.items[idx].photo),
-        priceLabel: body.priceLabel,
+        priceLabel: body.priceLabel ?? { ka: "", en: "", ru: "" },
         priceVariants: body.priceVariants ?? [],
     };
 

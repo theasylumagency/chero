@@ -59,6 +59,7 @@ export default function DishPhotoUploader({ dishId, currentPhotoUrl, onUploadSuc
             return;
         }
 
+        const j = await r.json();
         const newUrl = j.photo.small.startsWith("/") ? j.photo.small : `/uploads/dishes/${j.photo.small}`;
 
         if (onUploadSuccess) onUploadSuccess(newUrl);

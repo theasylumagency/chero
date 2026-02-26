@@ -6,11 +6,13 @@ import { useUnsavedChanges } from "./UnsavedChangesProvider";
 export default function GuardedLink({
     href,
     className,
+    title,
     children,
     onSave,
 }: {
     href: string;
     className?: string;
+    title?: string;
     children: React.ReactNode;
     onSave?: () => Promise<boolean> | boolean; // return false to cancel navigation
 }) {
@@ -21,6 +23,7 @@ export default function GuardedLink({
         <a
             href={href}
             className={className}
+            title={title}
             draggable={false}
             onClick={async (e) => {
                 e.preventDefault();

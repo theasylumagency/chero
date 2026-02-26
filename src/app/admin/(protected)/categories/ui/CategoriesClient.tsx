@@ -5,6 +5,8 @@ import type { Category, Lang } from "@/lib/menuStore";
 import SortableList from "../../ui/SortableList";
 import { useUnsavedChanges } from "../../ui/unsaved/UnsavedChangesProvider";
 import GuardedLink from "../../ui/unsaved/GuardedLink";
+import { useLocale } from "next-intl";
+import AdminLocaleSwitch from "../../ui/AdminLocaleSwitch";
 
 function normalizeOrder(list: Category[]) {
     return list.map((c, i) => ({ ...c, order: (i + 1) * 10 }));
@@ -37,7 +39,7 @@ export default function CategoriesClient({
 }) {
     const { setDirty: setGlobalDirty, confirm, alert } = useUnsavedChanges();
 
-    const [lang, setLang] = useState<Lang>("ka");
+    const lang = useLocale() as Lang;
     const [items, setItems] = useState<Category[]>([...initial].sort((a, b) => a.order - b.order));
     const [saving, setSaving] = useState(false);
 
@@ -104,17 +106,12 @@ export default function CategoriesClient({
 
     return (
         <div>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
-                <h1>Categories</h1>
+            <div className="flex justify-between items-center gap-3 sticky top-0 z-20 bg-[#0b0d12]/95 backdrop-blur-md p-4 -mx-4 lg:-mx-10 rounded-b-2xl border-b border-white/5 shadow-md">
+                <h1 className="text-2xl font-serif text-white m-0">Categories</h1>
 
-                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                    <label>UI:</label>
-                    <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} style={{ width: 90 }}>
-                        <option value="ka">KA</option>
-                        <option value="en">EN</option>
-                        <option value="ru">RU</option>
-                    </select>
-
+                <div className="flex gap-4 items-center">
+                    <AdminLocaleSwitch />
+                    <div className="w-[1px] h-6 bg-white/10 hidden md:block"></div>
                     <GuardedLink className="btn" href="/admin/categories/new" onSave={saveAll}>
                         + Add
                     </GuardedLink>

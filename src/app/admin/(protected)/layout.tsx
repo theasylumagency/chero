@@ -1,6 +1,6 @@
 import "./admin.css";
 import UnsavedChangesProvider from "./ui/unsaved/UnsavedChangesProvider";
-import AdminNavLink from "./ui/unsaved/AdminNavLink";
+import AdminSidebar from "./ui/AdminSidebar";
 import AdminLocaleSwitch from "./ui/AdminLocaleSwitch";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -20,20 +20,15 @@ export default async function AdminProtectedLayout({ children }: { children: Rea
     return (
         <NextIntlClientProvider messages={messages}>
             <UnsavedChangesProvider>
-                <div>
-                    <header style={{ padding: 14 }}>
-                        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                            <div style={{ display: "flex", gap: 16 }}>
-                                <AdminNavLink href="/admin">Dashboard</AdminNavLink>
-                                <AdminNavLink href="/admin/categories">Categories</AdminNavLink>
-                                <AdminNavLink href="/admin/dishes">Dishes</AdminNavLink>
-                            </div>
-                            <AdminLocaleSwitch />
-                        </div>
-                    </header>
+                <div className="flex min-h-screen bg-[#0b0d12]">
+                    <AdminSidebar />
 
-                    <main>
-                        <div style={{ maxWidth: 1100, margin: "0 auto", padding: 18 }}>{children}</div>
+                    <main className="flex-1 flex flex-col min-w-0">
+                        <div className="flex-1 p-6 md:p-10">
+                            <div className="max-w-[1200px] mx-auto">
+                                {children}
+                            </div>
+                        </div>
                     </main>
                 </div>
             </UnsavedChangesProvider>

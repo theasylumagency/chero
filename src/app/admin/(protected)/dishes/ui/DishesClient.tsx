@@ -6,6 +6,10 @@ import type { Category, Dish, Lang } from "@/lib/menuStore";
 import SortableList from "../../ui/SortableList";
 import { useUnsavedChanges } from "../../ui/unsaved/UnsavedChangesProvider";
 import GuardedLink from "../../ui/unsaved/GuardedLink";
+import { useLocale } from "next-intl";
+import AdminLocaleSwitch from "../../ui/AdminLocaleSwitch";
+import { GripVertical, Edit, Trash2 } from "lucide-react";
+import DishPhotoUploader from "./DishPhotoUploader";
 
 type SnapshotRow = {
     id: string;
@@ -58,7 +62,7 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
 
     const catsSorted = useMemo(() => [...categories].sort((a, b) => a.order - b.order), [categories]);
 
-    const [lang, setLang] = useState<Lang>("ka");
+    const lang = useLocale() as Lang;
 
     // Ensure defaultCatId is valid, otherwise fallback
     const validCatId = defaultCatId && catsSorted.some(c => c.id === defaultCatId) ? defaultCatId : (catsSorted[0]?.id ?? "");
@@ -66,6 +70,8 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
 
     const [items, setItems] = useState<Dish[]>(dishes);
     const [saving, setSaving] = useState(false);
+    const [editingDishId, setEditingDishId] = useState<string | null>(null);
+    const activeDish = editingDishId ? items.find(d => d.id === editingDishId) : null;
 
     // Baseline snapshot per category (ids/order/status)
     const [baselineMap, setBaselineMap] = useState<Record<string, SnapshotRow[]>>(() => {
@@ -82,11 +88,24 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
     });
 
     const filtered = useMemo(() => {
-        return items
+        const catDishes = items
             .filter((d) => d.categoryId === catId)
             .slice()
             .sort((a, b) => a.order - b.order);
+
+        return catDishes;
     }, [items, catId]);
+
+    // Auto-select the first dish if the current selection is invalid for this category
+    useEffect(() => {
+        if (!editingDishId || !filtered.some(d => d.id === editingDishId)) {
+            if (filtered.length > 0) {
+                setEditingDishId(filtered[0].id);
+            } else {
+                setEditingDishId(null);
+            }
+        }
+    }, [filtered, editingDishId]);
 
     const currentSnap = useMemo(() => snapshotForCategory(items, catId), [items, catId]);
     const baseSnap = useMemo(() => baselineMap[catId] ?? [], [baselineMap, catId]);
@@ -272,18 +291,13 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
 
     return (
         <div>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
-                <h1>Dishes</h1>
+            <div className="flex justify-between items-center gap-3 sticky top-0 z-20 bg-[#0b0d12]/95 backdrop-blur-md p-4 -mx-4 lg:-mx-10 rounded-b-2xl border-b border-white/5 shadow-md">
+                <h1 className="text-2xl font-serif text-white m-0">Dishes</h1>
 
-                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                    <label>UI:</label>
-                    <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} style={{ width: 90 }}>
-                        <option value="ka">KA</option>
-                        <option value="en">EN</option>
-                        <option value="ru">RU</option>
-                    </select>
-
-                    <GuardedLink className="btn" href="/admin/dishes/new" onSave={saveCurrentCategory}>
+                <div className="flex gap-4 items-center">
+                    <AdminLocaleSwitch />
+                    <div className="w-[1px] h-6 bg-white/10 hidden md:block"></div>
+                    <GuardedLink className="btnAdd" href="/admin/dishes/new" onSave={saveCurrentCategory}>
                         + Add
                     </GuardedLink>
 
@@ -293,18 +307,18 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                 </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 16, marginTop: 12 }}>
-                {/* Category list (LEFT SIDE) */}
-                <aside className="panel" style={{ padding: 12 }}>
-                    <div style={{ fontSize: 12, opacity: 0.8, marginBottom: 8 }}>Categories</div>
-                    <div style={{ display: "grid", gap: 6 }}>
+            <div className="flex flex-col lg:flex-row gap-4 mt-6">
+                {/* Category list (TOP ON MOBILE, LEFT ON DESKTOP) */}
+                <aside className="panel p-3 lg:w-[220px] flex-shrink-0 h-fit lg:sticky lg:top-[120px]">
+                    <div className="text-xs opacity-80 mb-2 hidden lg:block text-[#9aa6bd]">Categories</div>
+                    <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 hide-scrollbar">
                         {catsSorted.map((c) => {
                             const active = c.id === catId;
                             return (
                                 <button
                                     key={c.id}
                                     type="button"
-                                    className="pill"
+                                    className="pill whitespace-nowrap flex-shrink-0"
                                     data-active={active ? "true" : "false"}
                                     onClick={() => switchCategory(c.id)}
                                     style={{ justifyContent: "flex-start" }}
@@ -318,7 +332,11 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                 </aside>
 
                 {/* Dishes list */}
-                <section className="panel" style={{ padding: 12 }}>
+                <section className="panel flex-1" style={{ padding: 12 }}>
+                    <div className="md:hidden bg-[#1c2333]/80 border border-[#3b4b6b] text-[#9aa6bd] text-sm p-3 rounded-lg mb-4">
+                        Full menu management features (pricing, status, ingredients) are available in widescreen desktop view.
+                    </div>
+
                     <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", marginBottom: 10 }}>
                         <div style={{ opacity: 0.8 }}>{dirty ? "Unsaved changes (press Save)" : "Drag & drop to reorder"}</div>
                         <div style={{ opacity: 0.7, fontSize: 12 }}>
@@ -326,12 +344,21 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                         </div>
                     </div>
 
+                    <div className="hidden md:grid grid-cols-[30px_1fr_110px_90px_100px] gap-2.5 px-3 pb-2 text-[11px] uppercase tracking-wider text-[#9aa6bd]">
+                        <div></div>
+                        <div>Dish Name</div>
+                        <div>Status</div>
+                        <div className="text-right pr-2">Price</div>
+                        <div className="text-center">Actions</div>
+                    </div>
+
                     <SortableList
                         items={filtered}
                         onReorder={(next) => applyLocalOrder(next)}
                         renderRow={(d, { isDragging, isOver, overPos, dragProps }) => (
                             <div
-                                className="row"
+                                className={`row transition-all duration-300 cursor-pointer border ${editingDishId === d.id ? "bg-[#c5a880]/10 border-[#c5a880]/50 shadow-md shadow-[#c5a880]/5" : "border-transparent hover:bg-white/5"}`}
+                                onClick={() => setEditingDishId(d.id)}
                                 style={{
                                     opacity: isDragging ? 0.6 : 1,
                                     padding: 12,
@@ -359,80 +386,130 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
 
                                 <div
                                     {...dragProps}
-                                    style={{
-                                        display: "grid",
-                                        gridTemplateColumns: "1fr 110px 120px 90px 90px",
-                                        gap: 10,
-                                        alignItems: "center",
-                                        cursor: "grab",
-                                    }}
+                                    className="grid grid-cols-[30px_1fr_auto] md:grid-cols-[30px_1fr_110px_90px_100px] gap-2.5 items-center cursor-grab"
                                 >
-                                    <div>
-                                        <div style={{ fontWeight: 700 }}>{d.title[lang] || "(empty)"}</div>
-                                        <div style={{ opacity: 0.7, fontSize: 12 }}>{d.id}</div>
+                                    <div className="text-white/20 hover:text-white/50 transition-colors flex items-center justify-center">
+                                        <GripVertical size={18} />
+                                    </div>
+                                    <div className="min-w-0 pr-4">
+                                        <div className="font-bold truncate">{d.title[lang] || "(empty)"}</div>
+                                        <div className="text-white/40 text-xs truncate">{d.id}</div>
                                     </div>
 
-                                    <button className="btn" type="button" draggable={false} onClick={() => toggleLocalStatus(d.id)}>
-                                        {d.status}
-                                    </button>
+                                    <div className="hidden md:block">
+                                        <div
+                                            className="pill flex flex-row items-center gap-2 cursor-pointer select-none w-fit"
+                                            onClick={(e) => { e.stopPropagation(); toggleLocalStatus(d.id); }}
+                                        >
+                                            <div className={`relative w-8 h-4 rounded-full transition-colors duration-300 ${d.status === 'active' ? 'bg-[#c5a880]' : 'bg-white/10'}`}>
+                                                <div className={`absolute left-0.5 top-0.5 w-3 h-3 rounded-full bg-white transition-transform duration-300 ${d.status === 'active' ? 'translate-x-4' : 'translate-x-0'}`} />
+                                            </div>
+                                            <span className="text-[11px] opacity-80 uppercase tracking-wider w-12">{d.status}</span>
+                                        </div>
+                                    </div>
 
-                                    <div style={{ textAlign: "right" }}>
+                                    <div className="text-right pr-2 hidden md:block opacity-80 whitespace-nowrap">
                                         {(d.priceMinor / 100).toFixed(2)} {d.currency}
                                     </div>
 
-                                    <GuardedLink className="btn" href={`/admin/dishes/edit/${d.id}`} onSave={saveCurrentCategory}>
-                                        Edit
-                                    </GuardedLink>
-
-                                    <button className="btn" type="button" draggable={false} onClick={() => deleteLocalDish(d.id)}>
-                                        Delete
-                                    </button>
-                                </div>
-                                <div style={{ display: "flex", gap: 14, flexWrap: "wrap", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 12 }}>
-                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={d.vegetarian}
-                                            onChange={() => toggleLocalBoolean(d.id, 'vegetarian')}
-                                            style={{ marginRight: 8 }}
-                                        />
-                                        Vegetarian
-                                    </label>
-
-                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={d.topRated}
-                                            onChange={() => toggleLocalBoolean(d.id, 'topRated')}
-                                            style={{ marginRight: 8 }}
-                                        />
-                                        Bestseller
-                                    </label>
-
-                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={d.chefsPick}
-                                            onChange={() => toggleLocalBoolean(d.id, 'chefsPick')}
-                                            style={{ marginRight: 8 }}
-                                        />
-                                        Chef's Pick
-                                    </label>
-
-                                    <label className="pill" style={{ cursor: "pointer", fontSize: 11 }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={d.soldOut}
-                                            onChange={() => toggleLocalBoolean(d.id, 'soldOut')}
-                                            style={{ marginRight: 8 }}
-                                        />
-                                        Sold Out
-                                    </label>
+                                    <div className="flex items-center gap-1 justify-end md:justify-center">
+                                        <GuardedLink
+                                            className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                                            href={`/admin/dishes/edit/${d.id}`}
+                                            onSave={saveCurrentCategory}
+                                            title="Full Edit"
+                                        >
+                                            <Edit size={16} />
+                                        </GuardedLink>
+                                        <button
+                                            className="p-2 text-white/40 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                                            type="button"
+                                            title="Delete"
+                                            draggable={false}
+                                            onClick={(e) => { e.stopPropagation(); deleteLocalDish(d.id); }}
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )}
                     />
                 </section>
+
+                {/* Interactive Side Panel */}
+                {activeDish && (
+                    <aside className="panel p-5 hidden xl:flex lg:w-[260px] flex-shrink-0 h-fit sticky top-[120px] flex-col gap-4 animate-in slide-in-from-right-8 duration-300">
+                        <div className="flex justify-between items-start">
+                            <h2 className="font-serif text-xl pr-4">{activeDish.title[lang] || "Edit Dish"}</h2>
+                        </div>
+                        <div className="text-xs text-white/50 -mt-3 mb-2">ID: {activeDish.id}</div>
+
+                        <div className="mb-2">
+                            <DishPhotoUploader
+                                dishId={activeDish.id}
+                                currentPhotoUrl={activeDish.photo?.small}
+                                onUploadSuccess={(url) => {
+                                    setItems(prev => prev.map(d => d.id === activeDish.id ? {
+                                        ...d,
+                                        photo: { small: url, full: url.replace('_800', '_1600') }
+                                    } : d));
+                                }}
+                            />
+                        </div>
+
+                        <label className="text-sm opacity-80 flex flex-col gap-1">
+                            Price (in {activeDish.currency})
+                            <input
+                                type="number"
+                                step="0.01"
+                                className="bg-black/20 border border-white/10 rounded p-2 focus:border-[#c5a880] outline-none"
+                                value={(activeDish.priceMinor / 100).toFixed(2)}
+                                onChange={(e) => {
+                                    const val = Math.round(parseFloat(e.target.value || "0") * 100);
+                                    setItems(prev => prev.map(d => d.id === activeDish.id ? { ...d, priceMinor: val } : d));
+                                }}
+                            />
+                        </label>
+
+                        <label className="text-sm opacity-80 flex flex-col gap-1">
+                            Description / Ingredients ({lang.toUpperCase()})
+                            <textarea
+                                className="bg-black/20 border border-white/10 rounded p-2 focus:border-[#c5a880] outline-none min-h-[80px]"
+                                value={activeDish.description[lang] || ""}
+                                onChange={(e) => {
+                                    const v = e.target.value;
+                                    setItems(prev => prev.map(d => d.id === activeDish.id ? { ...d, description: { ...d.description, [lang]: v } } : d));
+                                }}
+                            />
+                        </label>
+
+                        <div className="flex gap-3 flex-wrap mt-2">
+                            {[
+                                { field: 'vegetarian', label: 'Vegetarian' },
+                                { field: 'topRated', label: 'Bestseller' },
+                                { field: 'chefsPick', label: 'Chef\'s Pick' },
+                                { field: 'soldOut', label: 'Sold Out' },
+                            ].map(({ field, label }) => {
+                                const checked = activeDish[field as keyof Dish] as boolean;
+                                return (
+                                    <div
+                                        key={field}
+                                        className="pill flex items-center gap-2 cursor-pointer select-none"
+                                        onClick={(e) => { e.stopPropagation(); toggleLocalBoolean(activeDish.id, field as any); }}
+                                    >
+                                        <div className={`relative w-8 h-4 rounded-full transition-colors duration-300 ${checked ? 'bg-[#c5a880]' : 'bg-white/10'}`}>
+                                            <div className={`absolute left-0.5 top-0.5 w-3 h-3 rounded-full bg-white transition-transform duration-300 ${checked ? 'translate-x-4' : 'translate-x-0'}`} />
+                                        </div>
+                                        <span className="text-[11px] opacity-80 uppercase tracking-wider">{label}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="text-[11px] text-[#c5a880] text-center leading-tight mt-2 bg-[#c5a880]/10 p-2 rounded">Auto-saved locally. Click 'Save' in the main header to commit.</div>
+                    </aside>
+                )}
             </div>
         </div>
     );

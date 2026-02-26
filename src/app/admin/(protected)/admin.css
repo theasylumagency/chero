@@ -28,19 +28,6 @@ a:hover {
     text-decoration: underline;
 }
 
-header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    backdrop-filter: blur(10px);
-    background: rgba(11, 13, 18, .65);
-    border-bottom: 1px solid var(--border);
-}
-
-main {
-    padding: 18px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -122,10 +109,11 @@ option {
 .panel {
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: rgba(255, 255, 255, .03);
+    background: rgba(0, 20, 136, 0.03);
 }
 
-.btn {
+.btn,
+.btnAdd {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -136,6 +124,14 @@ option {
     color: var(--text);
     cursor: pointer;
     text-decoration: none;
+}
+
+.btnAdd {
+    background-color: #0046ff;
+}
+
+.btnAdd:hover {
+    background: #537cec;
 }
 
 .btn:hover {
@@ -152,6 +148,20 @@ option {
     background: rgba(255, 255, 255, .04);
     color: var(--text);
     cursor: pointer;
+
+
+
+    background: #0b0e15;
+    border: 1px solid #0b0e15;
+    border-radius: 5px;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+
+    overflow: hidden;
+    font-weight: 100;
+    font-size: smaller;
+
 }
 
 .pill[data-active="true"] {
@@ -160,9 +170,8 @@ option {
 }
 
 .row {
-    border: 1px solid rgba(255, 255, 255, .10);
     border-radius: 12px;
-    background: rgba(255, 255, 255, .03);
+    background: #0f1620;
 }
 
 .row[data-over="true"] {

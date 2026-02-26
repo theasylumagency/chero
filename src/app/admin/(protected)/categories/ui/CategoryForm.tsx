@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Category } from "@/lib/menuStore";
+import AdminLocaleSwitch from "../../ui/AdminLocaleSwitch";
 
 export default function CategoryForm({ mode, initial }: { mode: "new" | "edit"; initial: Category }) {
     const [v, setV] = useState<Category>(initial);
@@ -34,9 +35,23 @@ export default function CategoryForm({ mode, initial }: { mode: "new" | "edit"; 
 
     return (
         <div style={{ maxWidth: 760 }}>
-            <h1>{mode === "new" ? "New Category" : `Edit Category: ${initial.id}`}</h1>
-
             <form onSubmit={save} style={{ display: "grid", gap: 12 }}>
+                <div className="flex justify-between items-center gap-3 sticky top-0 z-20 bg-[#0b0d12]/95 backdrop-blur-md p-4 -mx-6 md:-mx-10 rounded-b-2xl border-b border-white/5 shadow-md mb-4">
+                    <h1 className="text-2xl font-serif text-white m-0">
+                        {mode === "new" ? "New Category" : `Edit Category: ${initial.id}`}
+                    </h1>
+                    <div className="flex gap-4 items-center">
+                        <AdminLocaleSwitch />
+                        <div className="w-[1px] h-6 bg-white/10 hidden md:block"></div>
+                        <button type="button" onClick={() => router.push("/admin/categories")} className="btn">
+                            Cancel
+                        </button>
+                        <button disabled={busy} type="submit" className="btn btnPrimary">
+                            {busy ? "Saving..." : "Save"}
+                        </button>
+                    </div>
+                </div>
+
                 <div style={{ display: "grid", gap: 6 }}>
                     <div style={{ opacity: 0.8 }}>ID</div>
                     <code style={{ padding: 10, border: "1px solid var(--border)", borderRadius: 10 }}>{v.id}</code>
@@ -57,10 +72,7 @@ export default function CategoryForm({ mode, initial }: { mode: "new" | "edit"; 
                     <label>RU<input value={v.title.ru} onChange={(e) => setV({ ...v, title: { ...v.title, ru: e.target.value } })} style={{ width: "100%", padding: 10 }} /></label>
                 </fieldset>
 
-                <button disabled={busy} style={{ padding: 10 }}>
-                    {busy ? "Saving..." : "Save"}
-                </button>
             </form>
-        </div>
+        </div >
     );
 }

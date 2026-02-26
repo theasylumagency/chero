@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useRef } from "react";
 import Cropper from "react-easy-crop";
+import { ImagePlus } from "lucide-react";
 
 type Photo = { full: string; small: string } | null;
 
-export default function DishPhotoUploader({ dishId, current }: { dishId: string; current: { full: string; small: string } | null }) {
+export default function DishPhotoUploader({ dishId, currentPhotoUrl, onUploadSuccess }: { dishId: string; currentPhotoUrl?: string | null; onUploadSuccess?: (url: string) => void }) {
     const [file, setFile] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -14,7 +15,16 @@ export default function DishPhotoUploader({ dishId, current }: { dishId: string;
     const [croppedPixels, setCroppedPixels] = useState<any>(null);
 
     const [busy, setBusy] = useState(false);
-    const [result, setResult] = useState<Photo>(current ? { full: `/uploads/dishes/${current.full}`, small: `/uploads/dishes/${current.small}` } : null);
+
+    // Derive the display URL directly from the parent's props to prevent stale state across dish selection
+    const displayUrl = useMemo(() => {
+        if (!currentPhotoUrl) return null;
+        if (currentPhotoUrl.startsWith("/") || currentPhotoUrl.startsWith("http")) return currentPhotoUrl;
+        return `/uploads/dishes/${currentPhotoUrl}`;
+    }, [currentPhotoUrl]);
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isDragOver, setIsDragOver] = useState(false);
 
     const open = useMemo(() => !!imageUrl, [imageUrl]);
 
@@ -49,32 +59,79 @@ export default function DishPhotoUploader({ dishId, current }: { dishId: string;
             return;
         }
 
-        const j = await r.json();
-        setResult(j.photo);
+        const newUrl = j.photo.small.startsWith("/") ? j.photo.small : `/uploads/dishes/${j.photo.small}`;
+
+        if (onUploadSuccess) onUploadSuccess(newUrl);
+
         // close modal
         if (imageUrl) URL.revokeObjectURL(imageUrl);
         setImageUrl(null);
         setFile(null);
     }
 
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragOver(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragOver(false);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragOver(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            onPick(e.dataTransfer.files[0]);
+        }
+    };
+
     return (
-        <div>
-            {result && (
-                <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
-                    <img src={result.small} alt="" style={{ width: 240, height: 135, objectFit: "cover", borderRadius: 8, border: "1px solid #ddd" }} />
-                    <div style={{ color: "#666" }}>Current: {result.small}</div>
+        <div className="flex flex-col gap-3">
+            {!open && (
+                <div
+                    className={`relative w-full aspect-video rounded-xl overflow-hidden cursor-pointer transition-all duration-300 border-2 flex items-center justify-center ${isDragOver ? "border-[#c5a880] bg-[#c5a880]/10" : displayUrl ? "border-transparent" : "border-dashed border-white/20 hover:border-white/40 hover:bg-white/5"
+                        }`}
+                    onClick={() => fileInputRef.current?.click()}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                >
+                    {displayUrl ? (
+                        <>
+                            <img src={displayUrl} alt="Dish photo" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col gap-2 backdrop-blur-sm">
+                                <ImagePlus size={28} className="text-white" />
+                                <span className="text-white font-medium text-sm">Change Photo</span>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-white/50 gap-3 pointer-events-none p-4 text-center">
+                            <ImagePlus size={32} className="opacity-60" />
+                            <div>
+                                <span className="text-white/80 font-medium">Click to upload</span> or drag and drop
+                            </div>
+                            <span className="text-[10px] uppercase tracking-widest opacity-60">16:9 Aspect Ratio</span>
+                        </div>
+                    )}
                 </div>
             )}
 
             <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => onPick(e.target.files?.[0] ?? null)}
+                className="hidden"
+                ref={fileInputRef}
+                onChange={(e) => {
+                    onPick(e.target.files?.[0] ?? null);
+                    if (e.target) e.target.value = ''; // reset input
+                }}
             />
 
             {open && (
-                <div style={{ marginTop: 12, border: "1px solid #ddd", borderRadius: 12, overflow: "hidden" }}>
-                    <div style={{ position: "relative", width: "100%", height: 360, background: "#111" }}>
+                <div style={{ marginTop: 12, border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden" }}>
+                    <div style={{ position: "relative", width: "100%", height: 260, background: "#0b0d12" }}>
                         <Cropper
                             image={imageUrl!}
                             crop={crop}
@@ -86,26 +143,29 @@ export default function DishPhotoUploader({ dishId, current }: { dishId: string;
                         />
                     </div>
 
-                    <div style={{ display: "flex", gap: 12, padding: 12, alignItems: "center" }}>
-                        <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: 12, background: "rgba(255,255,255,0.05)" }}>
+                        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
                             Zoom
-                            <input type="range" min={1} max={3} step={0.01} value={zoom} onChange={(e) => setZoom(parseFloat(e.target.value))} />
+                            <input type="range" min={1} max={3} step={0.01} value={zoom} onChange={(e) => setZoom(parseFloat(e.target.value))} style={{ flex: 1 }} />
                         </label>
 
-                        <button onClick={upload} disabled={busy || !croppedPixels} style={{ padding: "8px 12px" }}>
-                            {busy ? "Uploading..." : "Crop + Save"}
-                        </button>
+                        <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                            <button className="btn btnPrimary" style={{ flex: 1, padding: "8px 12px", justifyContent: "center" }} onClick={upload} disabled={busy || !croppedPixels}>
+                                {busy ? "Uploading..." : "Save Photo"}
+                            </button>
 
-                        <button
-                            onClick={() => {
-                                if (imageUrl) URL.revokeObjectURL(imageUrl);
-                                setImageUrl(null);
-                                setFile(null);
-                            }}
-                            style={{ padding: "8px 12px" }}
-                        >
-                            Cancel
-                        </button>
+                            <button
+                                className="btn"
+                                style={{ flex: 1, padding: "8px 12px", justifyContent: "center" }}
+                                onClick={() => {
+                                    if (imageUrl) URL.revokeObjectURL(imageUrl);
+                                    setImageUrl(null);
+                                    setFile(null);
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

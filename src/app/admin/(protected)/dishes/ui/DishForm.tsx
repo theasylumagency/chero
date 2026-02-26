@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { Category, Dish, Lang } from "@/lib/menuStore";
 import DishPhotoUploader from "./DishPhotoUploader";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useUnsavedChanges } from "../../ui/unsaved/UnsavedChangesProvider";
+import AdminLocaleSwitch from "../../ui/AdminLocaleSwitch";
 
 function tryAutoFillLabel(input: string): { en: string; ru: string } | null {
     if (!input) return null;
@@ -76,6 +77,7 @@ export default function DishForm({
     const router = useRouter();
     const t = useTranslations("admin.dishForm");
     const { toast } = useUnsavedChanges();
+    const lang = useLocale() as Lang;
 
     const sortedCats = useMemo(() => [...categories].sort((a, b) => a.order - b.order), [categories]);
 
@@ -121,24 +123,13 @@ export default function DishForm({
     return (
         <div style={{ maxWidth: 900, position: "relative" }}>
             <form onSubmit={save} style={{ display: "grid", gap: 12 }}>
-                <div style={{
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 10,
-                    background: "rgba(11, 13, 18, 0.85)",
-                    backdropFilter: "blur(12px)",
-                    padding: "16px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-                    margin: "-18px -18px 16px -18px",
-                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4)"
-                }}>
-                    <h1 style={{ margin: 0, fontSize: "1.5rem", color: "#e9eef7" }}>
+                <div className="flex justify-between items-center gap-3 sticky top-0 z-20 bg-[#0b0d12]/95 backdrop-blur-md p-4 -mx-6 md:-mx-10 rounded-b-2xl border-b border-white/5 shadow-md mb-4">
+                    <h1 className="text-2xl font-serif text-white m-0">
                         {mode === "new" ? t("newDish") : `${t("editDish")} ${v.id}`}
                     </h1>
-                    <div style={{ display: "flex", gap: "10px" }}>
+                    <div className="flex gap-4 items-center">
+                        <AdminLocaleSwitch />
+                        <div className="w-[1px] h-6 bg-white/10 hidden md:block"></div>
                         <button type="button" onClick={() => router.push(`/admin/dishes${v.categoryId ? `?category=${v.categoryId}` : ''}`)} className="btn">
                             {t("cancel")}
                         </button>
@@ -167,7 +158,7 @@ export default function DishForm({
                                         data-active={active ? "true" : "false"}
                                         onClick={() => setV({ ...v, categoryId: c.id })}
                                     >
-                                        {c.title.ka || c.id}
+                                        {c.title[lang] || c.id}
                                     </button>
                                 );
                             })}
@@ -338,7 +329,13 @@ export default function DishForm({
 
                 <div style={{ border: "1px solid #eee", padding: 12 }}>
                     <h3>Photo (16:9)</h3>
-                    <DishPhotoUploader dishId={v.id} current={v.photo ?? null} />
+                    <DishPhotoUploader
+                        dishId={v.id}
+                        currentPhotoUrl={v.photo?.small}
+                        onUploadSuccess={(url) => {
+                            setV({ ...v, photo: { small: url, full: url.replace('_800', '_1600') } });
+                        }}
+                    />
                     <p style={{ color: "#666", marginTop: 8 }}>
                         Upload → crop 16:9 → server saves WebP 1600×900 + 800×450 and stores filenames in dishes.json.
                     </p>

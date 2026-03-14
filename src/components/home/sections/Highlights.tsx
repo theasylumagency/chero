@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Link } from "lucide-react";
+import { useLocale } from "next-intl";
 
 export default function Highlights() {
     const t = useTranslations("home.highlights");
-
+    const locale = useLocale();
     const picks = [
         {
             name: t("items.adjaruli.name"),
@@ -40,35 +42,42 @@ export default function Highlights() {
 
             <div className="relative z-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 perspective-[1000px]">
                 {picks.map((d, i) => (
+
                     <div
+
                         key={d.name}
                         className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/40 shadow-2xl transition-all duration-700 hover:-translate-y-3 hover:shadow-[0_20px_40px_-15px_rgba(204,168,118,0.3)] hover:border-chero-accent/30"
                         style={{ animationDelay: `${i * 150}ms` }}
                     >
+
                         <div className="relative aspect-[3/4] w-full overflow-hidden">
-                            <Image
-                                src={d.image}
-                                alt={d.name}
-                                fill
-                                className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                                sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
-                                priority={false}
-                            />
+                            <a href={`/${locale}/menu`}>
+                                <Image
+                                    src={d.image}
+                                    alt={d.name}
+                                    fill
+                                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
+                                    priority={false}
+                                />
 
-                            {/* Rich double gradient overlay for luxurious text legibility */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-chero-900/95 via-chero-900/40 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100" />
-                            <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent" />
+                                {/* Rich double gradient overlay for luxurious text legibility */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-chero-900/95 via-chero-900/40 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100" />
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent" />
 
-                            <div className="absolute inset-x-0 bottom-0 p-8 transform transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
-                                <h3 className="text-xl sm:text-2xl font-serif text-white tracking-wide">
-                                    {d.name}
-                                </h3>
-                                <p className="mt-3 text-sm leading-relaxed text-white/70 opacity-0 transition-opacity duration-500 delay-100 group-hover:opacity-100">
-                                    {d.story}
-                                </p>
-                            </div>
+                                <div className="absolute inset-x-0 bottom-0 p-8 transform transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
+                                    <h3 className="text-xl sm:text-2xl font-serif text-white tracking-wide">
+                                        {d.name}
+                                    </h3>
+                                    <p className="mt-3 text-sm leading-relaxed text-white/70 opacity-0 transition-opacity duration-500 delay-100 group-hover:opacity-100">
+                                        {d.story}
+                                    </p>
+                                </div>
+                            </a>
                         </div>
+
                     </div>
+
                 ))}
             </div>
         </section>

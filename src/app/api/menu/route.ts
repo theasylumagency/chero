@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
         {
             headers: {
                 // You can tune this later; fine for VPS cache + browser cache
-                "Cache-Control": "public, max-age=30",
+                "Cache-Control": "public, max-age=5, stale-while-revalidate=25",
             },
         }
     );

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/requireAdmin";
 import { loadCategories, saveCategories, Category, loadDishes } from "@/lib/menuStore";
 
@@ -36,5 +37,6 @@ export async function POST(req: NextRequest) {
 
     current.items = next;
     await saveCategories(current);
+    revalidatePath("/api/menu");
     return NextResponse.json({ ok: true });
 }

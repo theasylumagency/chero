@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/requireAdmin";
 import { loadDishes, saveDishes } from "@/lib/menuStore";
 
@@ -9,7 +10,7 @@ export async function POST(req: NextRequest) {
 
     const body = (await req.json().catch(() => null)) as {
         categoryId?: string;
-        items?: { id: string; order: number; status: "active" | "hidden"; vegetarian: boolean; topRated: boolean; chefsPick: boolean; soldOut: boolean }[];
+        items?: { id: string; order: number; status: "active" | "hidden"; vegetarian: boolean; topRated: boolean; chefsPick: boolean; soldOut: boolean; priceMinor?: number; description?: Record<string, string> }[];
     } | null;
 
     if (!body?.categoryId || !Array.isArray(body.items)) {
@@ -36,10 +37,13 @@ export async function POST(req: NextRequest) {
             vegetarian: !!u.vegetarian,
             topRated: !!u.topRated,
             chefsPick: !!u.chefsPick,
-            soldOut: !!u.soldOut
+            soldOut: !!u.soldOut,
+            ...(typeof u.priceMinor === "number" ? { priceMinor: u.priceMinor } : {}),
+            ...(u.description ? { description: u.description } : {}),
         };
     });
 
     await saveDishes(wrap);
+    revalidatePath("/api/menu");
     return NextResponse.json({ ok: true });
 }

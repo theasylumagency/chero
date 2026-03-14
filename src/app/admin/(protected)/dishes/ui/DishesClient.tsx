@@ -19,6 +19,8 @@ type SnapshotRow = {
     topRated: boolean;
     chefsPick: boolean;
     soldOut: boolean;
+    priceMinor: number;
+    description: Record<string, string>;
 };
 
 function snapshotForCategory(all: Dish[], categoryId: string): SnapshotRow[] {
@@ -33,7 +35,9 @@ function snapshotForCategory(all: Dish[], categoryId: string): SnapshotRow[] {
             vegetarian: !!d.vegetarian,
             topRated: !!d.topRated,
             chefsPick: !!d.chefsPick,
-            soldOut: !!d.soldOut
+            soldOut: !!d.soldOut,
+            priceMinor: d.priceMinor,
+            description: d.description,
         }));
 }
 
@@ -47,6 +51,8 @@ function sameSnapshot(a: SnapshotRow[], b: SnapshotRow[]) {
         if (a[i].topRated !== b[i].topRated) return false;
         if (a[i].chefsPick !== b[i].chefsPick) return false;
         if (a[i].soldOut !== b[i].soldOut) return false;
+        if (a[i].priceMinor !== b[i].priceMinor) return false;
+        if (JSON.stringify(a[i].description) !== JSON.stringify(b[i].description)) return false;
     }
     return true;
 }
@@ -126,7 +132,9 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
             vegetarian: !!d.vegetarian,
             topRated: !!d.topRated,
             chefsPick: !!d.chefsPick,
-            soldOut: !!d.soldOut
+            soldOut: !!d.soldOut,
+            priceMinor: d.priceMinor,
+            description: d.description,
         }));
 
         const r = await fetch("/api/admin/dishes/bulk", {

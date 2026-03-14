@@ -12,7 +12,8 @@
 
 # testing
 /coverage
-
+/data
+/public/uploads/dishes
 # next.js
 /.next/
 /out/

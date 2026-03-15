@@ -64,7 +64,7 @@ export default function DishDetailsModal({
                 <div className="relative w-full md:w-1/2 lg:w-[60%] h-[40vh] md:h-full shrink-0 overflow-hidden">
                     {dish.photo?.full ? (
                         <Image
-                            src={dish.photo.full}
+                            src={`/uploads/dishes/${dish.photo.full}`}
                             alt={dish.title}
                             fill
                             sizes="(max-width: 768px) 100vw, 60vw"

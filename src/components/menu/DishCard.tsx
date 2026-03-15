@@ -47,7 +47,7 @@ export default function DishCard({
             <div className="relative aspect-[4/3] sm:aspect-video w-full overflow-hidden rounded-[2rem] shadow-2xl">
                 {dish.photo?.small ? (
                     <Image
-                        src={dish.photo.small}
+                        src={`/uploads/dishes/${dish.photo.small}`}
                         alt={dish.title}
                         fill
                         sizes="(max-width: 640px) 100vw, 50vw"

@@ -91,8 +91,8 @@ export async function POST(req: NextRequest) {
     wrap.items[idx] = {
         ...wrap.items[idx],
         photo: { 
-            full: `${fullName}?v=${timestamp}`, 
-            small: `${smallName}?v=${timestamp}`,
+            full: `/uploads/dishes/${fullName}?v=${timestamp}`, 
+            small: `/uploads/dishes/${smallName}?v=${timestamp}`,
             timestamp,
         },
     };
@@ -103,6 +103,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
         ok: true,
         photo: {
+            full: `/uploads/dishes/${fullName}?v=${timestamp}`,
+            small: `/uploads/dishes/${smallName}?v=${timestamp}`,
+        },
+    });
             full: `${fullName}?v=${timestamp}`,
             small: `${smallName}?v=${timestamp}`,
         },

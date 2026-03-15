@@ -107,8 +107,4 @@ export async function POST(req: NextRequest) {
             small: `/uploads/dishes/${smallName}?v=${timestamp}`,
         },
     });
-            full: `${fullName}?v=${timestamp}`,
-            small: `${smallName}?v=${timestamp}`,
-        },
-    });
 }

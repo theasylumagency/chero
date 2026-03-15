@@ -30,6 +30,7 @@ export type Dish = {
     photo?: {
         full: string;  // dish_<id>_1600.webp
         small: string; // dish_<id>_800.webp
+        timestamp?: number; // cache-busting timestamp
     };
 };
 function normalizeLangRecord(input: any): Record<Lang, string> {

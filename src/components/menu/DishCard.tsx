@@ -56,6 +56,7 @@ export default function DishCard({
                             soldOut ? "grayscale contrast-[0.9]" : "group-hover:scale-[1.05]",
                         ].join(" ")}
                         priority={false}
+                        unoptimized={true}
                     />
                 ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent" />

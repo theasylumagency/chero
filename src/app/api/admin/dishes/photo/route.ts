@@ -87,11 +87,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Dish not found" }, { status: 404 });
     }
 
+    const timestamp = Date.now();
     wrap.items[idx] = {
         ...wrap.items[idx],
         photo: { 
-            full: `/uploads/dishes/${fullName}`, 
-            small: `/uploads/dishes/${smallName}` 
+            full: `/uploads/dishes/${fullName}?v=${timestamp}`, 
+            small: `/uploads/dishes/${smallName}?v=${timestamp}`,
+            timestamp,
         },
     };
 
@@ -101,8 +103,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
         ok: true,
         photo: {
-            full: `/uploads/dishes/${fullName}`,
-            small: `/uploads/dishes/${smallName}`,
+            full: `/uploads/dishes/${fullName}?v=${timestamp}`,
+            small: `/uploads/dishes/${smallName}?v=${timestamp}`,
         },
     });
 }

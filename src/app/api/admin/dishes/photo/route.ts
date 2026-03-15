@@ -89,7 +89,10 @@ export async function POST(req: NextRequest) {
 
     wrap.items[idx] = {
         ...wrap.items[idx],
-        photo: { full: fullName, small: smallName },
+        photo: { 
+            full: `/uploads/dishes/${fullName}`, 
+            small: `/uploads/dishes/${smallName}` 
+        },
     };
 
     await saveDishes(wrap);

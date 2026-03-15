@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import path from "node:path";
 import fs from "node:fs/promises";
 import sharp from "sharp";
@@ -92,6 +93,7 @@ export async function POST(req: NextRequest) {
     };
 
     await saveDishes(wrap);
+    revalidatePath("/[locale]/menu", "page");
 
     return NextResponse.json({
         ok: true,

@@ -37,6 +37,6 @@ export async function POST(req: NextRequest) {
 
     current.items = next;
     await saveCategories(current);
-    revalidatePath("/api/menu");
+    revalidatePath("/[locale]/menu", "page");
     return NextResponse.json({ ok: true });
 }

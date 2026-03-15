@@ -6394,7 +6394,11 @@
         "en": "",
         "ru": ""
       },
-      "priceVariants": []
+      "priceVariants": [],
+      "photo": {
+        "full": "dish_dish_0184_1600.webp",
+        "small": "dish_dish_0184_800.webp"
+      }
     },
     {
       "id": "dish_0185",
@@ -6427,7 +6431,11 @@
         "en": "",
         "ru": ""
       },
-      "priceVariants": []
+      "priceVariants": [],
+      "photo": {
+        "full": "dish_dish_0185_1600.webp",
+        "small": "dish_dish_0185_800.webp"
+      }
     },
     {
       "id": "dish_0186",
@@ -7243,5 +7251,5 @@
       "priceVariants": []
     }
   ],
-  "updatedAt": "2026-03-14T08:04:49.000Z"
+  "updatedAt": "2026-03-15T11:22:52.696Z"
 }

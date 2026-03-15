@@ -44,6 +44,6 @@ export async function POST(req: NextRequest) {
     else wrap.items[idx] = next;
 
     await saveDishes(wrap);
-    revalidatePath("/api/menu");
+    revalidatePath("/[locale]/menu", "page");
     return NextResponse.json({ ok: true });
 }

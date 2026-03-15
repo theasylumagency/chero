@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/requireAdmin";
 import { loadDishes, saveDishes } from "@/lib/menuStore";
 
@@ -27,5 +28,6 @@ export async function POST(req: NextRequest) {
     });
 
     await saveDishes(wrap);
+    revalidatePath("/[locale]/menu", "page");
     return NextResponse.json({ ok: true });
 }

@@ -34,7 +34,8 @@
       "priceVariants": [],
       "photo": {
         "full": "dish_dish_0001_1600.webp",
-        "small": "dish_dish_0001_800.webp"
+        "small": "dish_dish_0001_800.webp",
+        "timestamp": 1773677517536
       }
     },
     {
@@ -7251,5 +7252,5 @@
       "priceVariants": []
     }
   ],
-  "updatedAt": "2026-03-15T11:22:52.696Z"
+  "updatedAt": "2026-03-16T16:11:57.536Z"
 }

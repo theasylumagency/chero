@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { resolveDishPhotoUrl } from "@/lib/dishPhoto";
 import type { Category, Dish, Lang } from "@/lib/menuStore";
 import SortableList from "../../ui/SortableList";
 import { useUnsavedChanges } from "../../ui/unsaved/UnsavedChangesProvider";
@@ -456,11 +457,15 @@ export default function DishesClient({ categories, dishes }: { categories: Categ
                         <div className="mb-2">
                             <DishPhotoUploader
                                 dishId={activeDish.id}
-                                currentPhotoUrl={activeDish.photo?.small}
-                                onUploadSuccess={(url) => {
+                                currentPhotoUrl={resolveDishPhotoUrl(activeDish.photo?.small, activeDish.photo?.timestamp)}
+                                onUploadSuccess={(photo) => {
                                     setItems(prev => prev.map(d => d.id === activeDish.id ? {
                                         ...d,
-                                        photo: { small: url, full: url.replace('_800', '_1600') }
+                                        photo: {
+                                            full: photo.full,
+                                            small: photo.small,
+                                            timestamp: photo.timestamp,
+                                        }
                                     } : d));
                                 }}
                             />

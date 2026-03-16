@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { resolveDishPhotoUrl } from "@/lib/dishPhoto";
 import type { Category, Dish, Lang } from "@/lib/menuStore";
 import DishPhotoUploader from "./DishPhotoUploader";
 import { useTranslations, useLocale } from "next-intl";
@@ -331,9 +332,16 @@ export default function DishForm({
                     <h3>Photo (16:9)</h3>
                     <DishPhotoUploader
                         dishId={v.id}
-                        currentPhotoUrl={v.photo?.small}
-                        onUploadSuccess={(url) => {
-                            setV({ ...v, photo: { small: url, full: url.replace('_800', '_1600') } });
+                        currentPhotoUrl={resolveDishPhotoUrl(v.photo?.small, v.photo?.timestamp)}
+                        onUploadSuccess={(photo) => {
+                            setV({
+                                ...v,
+                                photo: {
+                                    full: photo.full,
+                                    small: photo.small,
+                                    timestamp: photo.timestamp,
+                                },
+                            });
                         }}
                     />
                     <p style={{ color: "#666", marginTop: 8 }}>

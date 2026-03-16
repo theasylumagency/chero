@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/requireAdmin";
+import { normalizeDishPhoto } from "@/lib/dishPhoto";
 import { loadDishes, saveDishes, Dish } from "@/lib/menuStore";
 
 export const runtime = "nodejs";
@@ -20,6 +21,7 @@ export async function POST(req: NextRequest) {
 
     const wrap = await loadDishes();
     const idx = wrap.items.findIndex((d) => d.id === body.id);
+    const normalizedPhoto = normalizeDishPhoto(body.photo);
 
     const next: Dish = {
         id: body.id,
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest) {
         story: body.story ?? { ka: "", en: "", ru: "" },
         title: { ka: body.title?.ka ?? "", en: body.title?.en ?? "", ru: body.title?.ru ?? "" },
         description: { ka: body.description?.ka ?? "", en: body.description?.en ?? "", ru: body.description?.ru ?? "" },
-        photo: body.photo ?? (idx === -1 ? undefined : wrap.items[idx].photo),
+        photo: normalizedPhoto ?? (idx === -1 ? undefined : wrap.items[idx].photo),
         priceLabel: body.priceLabel ?? { ka: "", en: "", ru: "" },
         priceVariants: body.priceVariants ?? [],
     };

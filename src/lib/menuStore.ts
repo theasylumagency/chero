@@ -1,5 +1,7 @@
 import path from "node:path";
 import { readJsonFile, writeJsonAtomic, withFileLock } from "./fsSafe";
+import { normalizeDishPhoto, resolveDishPhotoUrl } from "./dishPhoto";
+import type { DishPhoto } from "./dishPhoto";
 
 export type Lang = "ka" | "en" | "ru";
 export type Status = "active" | "hidden";
@@ -27,11 +29,7 @@ export type Dish = {
     currency: "GEL";
     title: Record<Lang, string>;
     description: Record<Lang, string>;
-    photo?: {
-        full: string;  // dish_<id>_1600.webp
-        small: string; // dish_<id>_800.webp
-        timestamp?: number; // cache-busting timestamp
-    };
+    photo?: DishPhoto;
 };
 function normalizeLangRecord(input: any): Record<Lang, string> {
     return {
@@ -54,6 +52,7 @@ function normalizeDish(d: any): Dish {
 
         story: normalizeLangRecord(d?.story),
         priceLabel: normalizeLangRecord(d?.priceLabel),
+        photo: normalizeDishPhoto(d?.photo),
         priceVariants: Array.isArray(d?.priceVariants)
             ? d.priceVariants.map((v: any) => ({
                 priceMinor: Number(v.priceMinor) || 0,
@@ -140,8 +139,8 @@ export async function getPublicMenu(lang: Lang) {
             soldOut: !!d.soldOut,
             photo: d.photo
                 ? {
-                    full: `/uploads/dishes/${d.photo.full}`,
-                    small: `/uploads/dishes/${d.photo.small}`,
+                    full: resolveDishPhotoUrl(d.photo.full, d.photo.timestamp) ?? "",
+                    small: resolveDishPhotoUrl(d.photo.small, d.photo.timestamp) ?? "",
                 }
                 : null,
         })),

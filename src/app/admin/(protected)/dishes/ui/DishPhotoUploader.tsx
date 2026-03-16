@@ -2,33 +2,35 @@
 
 import { useCallback, useMemo, useState, useRef } from "react";
 import Cropper from "react-easy-crop";
+import type { Area } from "react-easy-crop";
 import { ImagePlus } from "lucide-react";
+import { resolveDishPhotoUrl } from "@/lib/dishPhoto";
+import type { DishPhoto } from "@/lib/dishPhoto";
 
-type Photo = { full: string; small: string } | null;
+type UploadedPhoto = DishPhoto & {
+    fullUrl: string | null;
+    smallUrl: string | null;
+};
 
-export default function DishPhotoUploader({ dishId, currentPhotoUrl, onUploadSuccess }: { dishId: string; currentPhotoUrl?: string | null; onUploadSuccess?: (url: string) => void }) {
+export default function DishPhotoUploader({ dishId, currentPhotoUrl, onUploadSuccess }: { dishId: string; currentPhotoUrl?: string | null; onUploadSuccess?: (photo: UploadedPhoto) => void }) {
     const [file, setFile] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
-    const [croppedPixels, setCroppedPixels] = useState<any>(null);
+    const [croppedPixels, setCroppedPixels] = useState<Area | null>(null);
 
     const [busy, setBusy] = useState(false);
 
     // Derive the display URL directly from the parent's props to prevent stale state across dish selection
-    const displayUrl = useMemo(() => {
-        if (!currentPhotoUrl) return null;
-        if (currentPhotoUrl.startsWith("/") || currentPhotoUrl.startsWith("http")) return currentPhotoUrl;
-        return `/uploads/dishes/${currentPhotoUrl}`;
-    }, [currentPhotoUrl]);
+    const displayUrl = useMemo(() => resolveDishPhotoUrl(currentPhotoUrl), [currentPhotoUrl]);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isDragOver, setIsDragOver] = useState(false);
 
     const open = useMemo(() => !!imageUrl, [imageUrl]);
 
-    const onCropComplete = useCallback((_area: any, areaPixels: any) => {
+    const onCropComplete = useCallback((_area: Area, areaPixels: Area) => {
         setCroppedPixels(areaPixels);
     }, []);
 
@@ -46,28 +48,37 @@ export default function DishPhotoUploader({ dishId, currentPhotoUrl, onUploadSuc
         if (!file || !croppedPixels) return;
         setBusy(true);
 
-        const form = new FormData();
-        form.append("dishId", dishId);
-        form.append("file", file);
-        form.append("crop", JSON.stringify(croppedPixels));
+        try {
+            const form = new FormData();
+            form.append("dishId", dishId);
+            form.append("file", file);
+            form.append("crop", JSON.stringify(croppedPixels));
 
-        const r = await fetch("/api/admin/dishes/photo", { method: "POST", body: form });
-        setBusy(false);
+            const r = await fetch("/api/admin/dishes/photo", { method: "POST", body: form });
+            const j = await r.json().catch(() => null);
 
-        if (!r.ok) {
-            alert("Upload failed");
-            return;
+            if (!r.ok) {
+                alert(j?.error ?? "Upload failed");
+                return;
+            }
+
+            const uploadedPhoto: UploadedPhoto = {
+                ...j.photo,
+                fullUrl: j?.urls?.full ?? resolveDishPhotoUrl(j?.photo?.full, j?.photo?.timestamp),
+                smallUrl: j?.urls?.small ?? resolveDishPhotoUrl(j?.photo?.small, j?.photo?.timestamp),
+            };
+
+            if (onUploadSuccess) onUploadSuccess(uploadedPhoto);
+
+            // close modal
+            if (imageUrl) URL.revokeObjectURL(imageUrl);
+            setImageUrl(null);
+            setFile(null);
+        } catch (error) {
+            alert(error instanceof Error ? error.message : "Upload failed");
+        } finally {
+            setBusy(false);
         }
-
-        const j = await r.json();
-        const newUrl = j.photo.small.startsWith("/") ? j.photo.small : `/uploads/dishes/${j.photo.small}`;
-
-        if (onUploadSuccess) onUploadSuccess(newUrl);
-
-        // close modal
-        if (imageUrl) URL.revokeObjectURL(imageUrl);
-        setImageUrl(null);
-        setFile(null);
     }
 
     const handleDragOver = (e: React.DragEvent) => {

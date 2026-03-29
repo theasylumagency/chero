@@ -71,7 +71,6 @@ export const metadata: Metadata = {
         // images: ["/og.jpg"],
     },
 
-    themeColor: "#0b0b0b",
     robots: { index: true, follow: true },
 };
 
